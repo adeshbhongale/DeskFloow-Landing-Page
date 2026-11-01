@@ -16,7 +16,7 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative -mt-[68px] overflow-hidden pt-[68px]">
+    <section className="relative -mt-[72px] overflow-hidden pt-[72px]">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-brand-100 via-brand-50 to-brand-50" />
       <div className="grid-bg pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
       <div className="pointer-events-none absolute top-[-160px] left-1/2 -z-10 h-[380px] w-[760px] -translate-x-1/2 rounded-full bg-brand-400/20 blur-[110px]" />

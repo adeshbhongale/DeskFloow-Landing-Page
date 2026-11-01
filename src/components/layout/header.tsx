@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, Menu, X, ArrowRight, PlayCircle } from "lucide-react";
+import { ChevronDown, Menu, X, ArrowRight, PlayCircle, MessageSquare } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { ButtonLink } from "@/components/ui/button";
 import { mainNav, platformNav } from "@/data/nav";
@@ -58,17 +58,17 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        scrolled ? "px-3 pt-3 sm:px-6" : "px-0 pt-0",
+        "sticky top-0 z-50 flex h-[72px] items-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        scrolled ? "px-3 sm:px-6" : "px-0",
       )}
     >
       <div
         ref={navRef}
         className={cn(
-          "mx-auto flex w-full items-center justify-between gap-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "relative mx-auto flex w-full items-center justify-between gap-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
           scrolled
-            ? "h-[60px] max-w-[1240px] rounded-[36px] border border-white/60 bg-white/50 px-6 shadow-[0_14px_40px_-10px_rgb(0_0_0/0.14)] ring-1 ring-black/5 backdrop-blur-3xl backdrop-saturate-150"
-            : "h-[72px] max-w-[1440px] rounded-[0px] border border-transparent bg-transparent px-5 sm:px-8",
+            ? "h-[58px] max-w-[1240px] rounded-[36px] border border-white/40 bg-white/30 px-6 shadow-[0_14px_40px_-10px_rgb(53_19_125/0.14)] ring-1 ring-brand-500/10 backdrop-blur-2xl backdrop-saturate-150"
+            : "h-[72px] max-w-[1440px] rounded-none border border-transparent bg-transparent px-5 sm:px-8",
         )}
       >
         <Link href="/" aria-label="DeskFloow home" className="shrink-0 transition-opacity hover:opacity-90">
@@ -105,23 +105,30 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Right Action Cluster: Log In + CTA */}
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            href="/login"
-            className="rounded-full px-4 py-2 text-[14px] font-semibold text-foreground/80 transition-colors hover:text-foreground hover:bg-muted"
+        {/* Right Action Cluster: Book a Demo (Colored) */}
+        <div className="hidden items-center gap-2.5 lg:flex">
+          <ButtonLink
+            href="/book-demo"
+            variant="primary"
+            size="sm"
+            className="shadow-brand-glow hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/35"
           >
-            Log in
-          </Link>
-          <ButtonLink href="/book-demo" size="sm" className="shadow-brand-glow">
             Book a Demo <ArrowRight className="size-3.5" />
           </ButtonLink>
         </div>
 
         {/* Mobile Navbar Controls */}
         <div className="flex items-center gap-2 lg:hidden">
+          <ButtonLink
+            href="/book-demo"
+            variant="primary"
+            size="sm"
+            className="h-8 px-3 text-[12.5px] shadow-brand-glow hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/35"
+          >
+            Book a Demo
+          </ButtonLink>
           <button
-            className="rounded-full p-2 text-foreground hover:bg-muted transition"
+            className="rounded-full p-2 text-foreground hover:bg-muted transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
             onClick={() => setMobile(true)}
             aria-label="Open menu"
             aria-expanded={mobile}
@@ -246,8 +253,20 @@ export function Header() {
                 </div>
               </div>
               <div className="grid gap-2.5 border-t border-border p-5">
-                <ButtonLink href="/book-demo">Book a Guided Demo</ButtonLink>
-                <ButtonLink href="/login" variant="secondary">Log in to Portal</ButtonLink>
+                <ButtonLink
+                  href="/book-demo"
+                  variant="primary"
+                  className="shadow-brand-glow hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/35"
+                >
+                  Book a Guided Demo <ArrowRight className="size-4" />
+                </ButtonLink>
+                <ButtonLink
+                  href="/contact"
+                  variant="secondary"
+                  className="focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25"
+                >
+                  <MessageSquare className="size-4" /> Contact Us
+                </ButtonLink>
               </div>
             </motion.aside>
           </>

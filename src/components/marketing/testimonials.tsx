@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Star, CheckCircle2, Building2 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
@@ -55,24 +55,25 @@ const reviews = [
 ];
 
 export function Testimonials() {
-  const [order, setOrder] = useState<number[]>(reviews.map((_, i) => i));
-  const [paused, setPaused] = useState(false);
-  const reduce = useReducedMotion();
+  const [order, setOrder] = useState<number[]>(() => reviews.map((_, i) => i));
+  const [hovered, setHovered] = useState(false);
 
-  // Automatic shuffle effect every 4 seconds
-  useEffect(() => {
-    if (paused || reduce) return;
-    const interval = setInterval(() => {
-      setOrder((prev) => [...prev.slice(1), prev[0]]);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [paused, reduce]);
-
-  const rotate = (dir: 1 | -1) => {
+  const rotate = useCallback((dir: 1 | -1) => {
     setOrder((prev) =>
-      dir === 1 ? [...prev.slice(1), prev[0]] : [prev[prev.length - 1], ...prev.slice(0, -1)]
+      dir === 1 ? [...prev.slice(1), prev[0]] : [prev[prev.length - 1], ...prev.slice(0, -1)],
     );
-  };
+  }, []);
+
+  // Continuous, reliable shuffle every 2.8 seconds (resets cleanly on manual interaction, never gets stuck)
+  useEffect(() => {
+    if (hovered) return;
+    const timer = setTimeout(() => {
+      if (!document.hidden) {
+        rotate(1);
+      }
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, [order, hovered, rotate]);
 
   const currentIdx = order[0];
 
@@ -84,28 +85,22 @@ export function Testimonials() {
           title="Loved by hotel owners, general managers and front desks."
           lead="From boutique heritage properties to luxury resorts and serviced villas, see how hospitality teams transform operations with DeskFloow."
         >
-          {/* Controls & Metrics */}
+          {/* Controls & Dots */}
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <div className="flex gap-2">
               <button
                 type="button"
                 aria-label="Previous review"
-                onClick={() => {
-                  setPaused(true);
-                  rotate(-1);
-                }}
-                className="rounded-full border border-border bg-card p-3 text-foreground shadow-sm transition hover:bg-muted hover:border-primary/50"
+                onClick={() => rotate(-1)}
+                className="rounded-full border border-border bg-card p-3 text-foreground shadow-sm transition hover:bg-muted hover:border-primary/50 active:scale-95"
               >
                 <ChevronLeft className="size-4.5" />
               </button>
               <button
                 type="button"
                 aria-label="Next review"
-                onClick={() => {
-                  setPaused(true);
-                  rotate(1);
-                }}
-                className="rounded-full border border-border bg-card p-3 text-foreground shadow-sm transition hover:bg-muted hover:border-primary/50"
+                onClick={() => rotate(1)}
+                className="rounded-full border border-border bg-card p-3 text-foreground shadow-sm transition hover:bg-muted hover:border-primary/50 active:scale-95"
               >
                 <ChevronRight className="size-4.5" />
               </button>
@@ -121,56 +116,59 @@ export function Testimonials() {
                   aria-selected={i === currentIdx}
                   aria-label={`Jump to review ${i + 1}`}
                   onClick={() => {
-                    setPaused(true);
                     const shift = (i - currentIdx + reviews.length) % reviews.length;
+                    if (shift === 0) return;
                     setOrder((prev) => [...prev.slice(shift), ...prev.slice(0, shift)]);
                   }}
                   className={cn(
                     "h-2 rounded-full transition-all duration-300",
-                    i === currentIdx ? "w-7 bg-primary" : "w-2 bg-border hover:bg-muted-foreground/50"
+                    i === currentIdx ? "w-7 bg-primary" : "w-2 bg-border hover:bg-muted-foreground/50",
                   )}
                 />
               ))}
             </div>
-
-            <span className="text-[12px] font-medium text-muted-foreground ml-auto hidden sm:inline-block">
-              Auto-shuffling · Hover to pause
-            </span>
           </div>
         </SectionHeading>
 
         {/* Shuffling Card Stack Container */}
         <div
-          className="relative h-[380px] sm:h-[350px]"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocus={() => setPaused(true)}
-          onBlur={() => setPaused(false)}
+          className="relative h-[380px] sm:h-[350px] [perspective:1200px]"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
-          <AnimatePresence initial={false}>
+          <AnimatePresence mode="popLayout" initial={false}>
             {order.slice(0, 3).map((idx, depth) => {
               const r = reviews[idx];
               return (
                 <motion.figure
-                  key={idx}
+                  key={r.name}
                   layout
-                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  initial={{ opacity: 0, y: 48, scale: 0.9, rotate: 4 }}
                   animate={{
-                    opacity: 1 - depth * 0.22,
-                    y: depth * 22,
-                    scale: 1 - depth * 0.05,
-                    rotate: depth === 0 ? 0 : depth % 2 ? 2.5 : -2.5,
+                    opacity: 1 - depth * 0.2,
+                    y: depth * 20,
+                    x: depth * 6,
+                    scale: 1 - depth * 0.045,
+                    rotate: depth === 0 ? 0 : depth % 2 ? 2.2 : -2.2,
                     zIndex: 10 - depth,
                   }}
                   exit={{
                     opacity: 0,
-                    x: -120,
-                    rotate: -8,
-                    transition: { duration: 0.35, ease: "easeOut" },
+                    x: -140,
+                    y: -16,
+                    scale: 0.92,
+                    rotate: -10,
                   }}
-                  transition={{ type: "spring", stiffness: 200, damping: 26 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 24,
+                    mass: 0.9,
+                  }}
+                  onClick={() => depth === 0 && rotate(1)}
                   className={cn(
-                    "absolute inset-x-0 top-0 rounded-3xl border border-border bg-card p-7 sm:p-8 shadow-xl text-card-foreground backdrop-blur",
+                    "absolute inset-x-0 top-0 cursor-pointer rounded-3xl border border-brand-200/80 bg-card p-7 sm:p-8 shadow-xl text-card-foreground backdrop-blur",
+                    depth === 0 && "ring-1 ring-brand-200/60 shadow-[0_22px_50px_-14px_rgb(53_19_125/0.22)]",
                     depth > 0 && "pointer-events-none select-none shadow-md",
                   )}
                   aria-hidden={depth > 0}

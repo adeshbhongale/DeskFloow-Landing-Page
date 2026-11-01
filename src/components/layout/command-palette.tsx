@@ -4,14 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   BedDouble, CalendarCheck, CalendarRange, Globe2, MessageCircle, Network,
-  Search, Sparkles, UsersRound, UtensilsCrossed, BarChart3, CreditCard,
-  Building2, ArrowRight, CornerDownLeft,
+  Search, Sparkles, UsersRound, UtensilsCrossed, BarChart3,
+  ArrowRight, CornerDownLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SearchEntry {
   id: string;
-  category: "Feature" | "Solution" | "Integration" | "Action";
+  category: "Feature" | "Action";
   title: string;
   meta: string;
   href: string;
@@ -29,18 +29,6 @@ const searchEntries: SearchEntry[] = [
   { id: "f-housekeeping", category: "Feature", title: "Smart Housekeeping & Visual Floor Plans", meta: "Live room readiness status, dirty-room guard & checklists", href: "/features#housekeeping", Icon: Sparkles },
   { id: "f-orders", category: "Feature", title: "Restaurant POS & Room Service Billing", meta: "Contactless QR menus, orders directly billed to room folio", href: "/features#orders", Icon: UtensilsCrossed },
   { id: "f-analytics", category: "Feature", title: "Revenue Management & Analytics", meta: "Real-time occupancy, ADR, RevPAR and source mix reporting", href: "/features#analytics", Icon: BarChart3 },
-
-  // Solutions
-  { id: "s-independent", category: "Solution", title: "Independent & Boutique Hotels", meta: "Streamline operations without expensive enterprise bloat", href: "/solutions#independent", Icon: Building2 },
-  { id: "s-resorts", category: "Solution", title: "Luxury Resorts & Destination Spas", meta: "Guest concierge, multiple outlets and personalized VIP stays", href: "/solutions#resorts", Icon: Sparkles },
-  { id: "s-homestays", category: "Solution", title: "Homestays, Villas & Serviced Apartments", meta: "Contactless check-in, WhatsApp messaging and automated ops", href: "/solutions#homestays", Icon: Globe2 },
-  { id: "s-chains", category: "Solution", title: "Hotel Groups & Regional Chains", meta: "Centralized multi-property reporting and inventory control", href: "/solutions#chains", Icon: Network },
-
-  // Integrations
-  { id: "i-booking", category: "Integration", title: "Booking.com Connection", meta: "Real-time 2-way rate and inventory distribution", href: "/integrations#ota", Icon: Network },
-  { id: "i-airbnb", category: "Integration", title: "Airbnb Direct Sync", meta: "Automated booking retrieval and calendar block updates", href: "/integrations#ota", Icon: Network },
-  { id: "i-whatsapp", category: "Integration", title: "WhatsApp Business API", meta: "Official verified WhatsApp messaging for confirmations & alerts", href: "/integrations#messaging", Icon: MessageCircle },
-  { id: "i-payments", category: "Integration", title: "Payment Gateways (UPI, Cards, Stripe)", meta: "Instant payment links and POS settlement", href: "/integrations#payments", Icon: CreditCard },
 
   // Actions
   { id: "a-demo", category: "Action", title: "Book a Guided Live Product Demo", meta: "Schedule a personalized 1-on-1 walkthrough for your hotel", href: "/book-demo", Icon: CalendarCheck },
@@ -105,7 +93,7 @@ export function CommandPalette() {
       ref={ref}
       onClose={() => setOpen(false)}
       onClick={(e) => e.target === ref.current && setOpen(false)}
-      aria-label="Search DeskFloow features and solutions"
+      aria-label="Search DeskFloow features and actions"
       className="mx-auto mt-[12vh] w-[min(640px,calc(100vw-24px))] rounded-3xl bg-transparent p-0 backdrop:bg-brand-950/60 backdrop:backdrop-blur-md"
     >
       <div className="card overflow-hidden border border-border shadow-2xl bg-card text-card-foreground">
@@ -131,7 +119,7 @@ export function CommandPalette() {
                 choose(results[active]);
               }
             }}
-            placeholder="Search features, solutions, channel manager, pricing..."
+            placeholder="Search features, channel manager, pricing, contact..."
             className="h-16 flex-1 bg-transparent text-[15px] font-medium text-foreground outline-none placeholder:text-muted-foreground/60"
           />
           <kbd className="hidden rounded-lg border border-border bg-muted px-2 py-1 text-[11px] font-semibold text-muted-foreground sm:inline-block">
@@ -143,7 +131,7 @@ export function CommandPalette() {
           {results.length === 0 ? (
             <div className="p-8 text-center">
               <p className="text-[14px] font-medium text-muted-foreground">No results found for &ldquo;{query}&rdquo;</p>
-              <p className="mt-1 text-[13px] text-muted-foreground/70">Try searching for Tape Chart, WhatsApp, Pricing, or Solutions</p>
+              <p className="mt-1 text-[13px] text-muted-foreground/70">Try searching for Tape Chart, WhatsApp, Pricing, or Contact</p>
             </div>
           ) : (
             <ul className="space-y-1">

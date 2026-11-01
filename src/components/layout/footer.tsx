@@ -3,23 +3,28 @@ import { Logo } from "@/components/ui/logo";
 import { platformNav } from "@/data/nav";
 
 const cols = [
-  { title: "Platform", links: platformNav.map((n) => ({ label: n.label, href: n.href })) },
   {
-    title: "Solutions",
+    title: "Features",
+    links: platformNav.slice(0, 6).map((n) => ({ label: n.label, href: n.href })),
+  },
+  {
+    title: "Navigation",
     links: [
-      { label: "Independent hotels", href: "/solutions#independent" },
-      { label: "Luxury hotels & resorts", href: "/solutions#resorts" },
-      { label: "Homestays & apartments", href: "/solutions#homestays" },
-      { label: "Hotel groups & chains", href: "/solutions#chains" },
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "About Us", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "Book a Demo", href: "/book-demo" },
+      { label: "FAQs", href: "/#faq" },
     ],
   },
   {
-    title: "Integrations",
+    title: "Resources & Legal",
     links: [
-      { label: "OTA channels", href: "/integrations#ota" },
-      { label: "WhatsApp Business", href: "/integrations#messaging" },
-      { label: "Payments", href: "/integrations#payments" },
-      { label: "Integration architecture", href: "/integrations#architecture" },
+      { label: "How DeskFloow Works", href: "/#how-it-works" },
+      { label: "Hotelier Reviews", href: "/#reviews" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
     ],
   },
 ];
@@ -37,11 +42,14 @@ export function Footer() {
             housekeeping, guest communication, orders and analytics into one workspace.
           </p>
           <div className="mt-6 flex flex-wrap gap-2 text-[13px]">
+            <Link href="/about" className="rounded-full border border-white/15 px-3.5 py-1.5 text-white/80 hover:border-gold-300 hover:text-gold-200">
+              About Us
+            </Link>
             <Link href="/contact" className="rounded-full border border-white/15 px-3.5 py-1.5 text-white/80 hover:border-gold-300 hover:text-gold-200">
-              Contact sales
+              Contact Us
             </Link>
             <Link href="/book-demo" className="rounded-full bg-gold-400 px-3.5 py-1.5 font-medium text-brand-950 hover:bg-gold-300">
-              Book a demo
+              Book a Demo
             </Link>
           </div>
         </div>
@@ -64,10 +72,12 @@ export function Footer() {
       </div>
       <div className="container-x relative flex flex-col gap-3 border-t border-white/10 py-6 text-[13px] text-white/50 sm:flex-row sm:items-center sm:justify-between">
         <p>© 2026 DeskFloow. The Intelligent Hotel Property Management &amp; Guest Experience Platform.</p>
-        <div className="flex gap-5">
+        <div className="flex flex-wrap gap-5">
+          <Link href="/about" className="hover:text-white">About Us</Link>
+          <Link href="/pricing" className="hover:text-white">Pricing</Link>
           <Link href="/privacy" className="hover:text-white">Privacy</Link>
           <Link href="/terms" className="hover:text-white">Terms</Link>
-          <Link href="/contact" className="hover:text-white">Contact</Link>
+          <Link href="/contact" className="hover:text-white">Contact Us</Link>
         </div>
       </div>
     </footer>

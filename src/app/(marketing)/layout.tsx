@@ -5,7 +5,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   return (
     <>
       <Header />
-      <main id="main" className="flex-1 [animation:wr_0.45s_cubic-bezier(0.22,1,0.36,1)_both]">
+      <main id="main" className="flex-1">
         {children}
       </main>
       <Footer />

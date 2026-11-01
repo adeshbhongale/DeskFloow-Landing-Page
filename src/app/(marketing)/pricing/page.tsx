@@ -15,7 +15,7 @@ const faqs = [
   ["Are these final prices?", "No. The prices shown are illustrative to help you evaluate fit. Final commercial rates depend on your room count, properties and integrations, and are shared during a demo."],
   ["Is there a discount for yearly billing?", "No discount is configured at the moment. The yearly figure is simply twelve months of the monthly price."],
   ["Is there a free trial?", "We don't offer a self-serve trial yet. You can explore the full interactive demo with sample data any time, and book a guided demo for your property."],
-  ["Which OTAs are supported?", "OTA connections are set up per channel. The demo simulates several channels; none are live yet. See the Integrations page for the current status of each."],
+  ["Which OTAs are supported?", "OTA connections are set up per channel. The demo simulates several channels; none are live yet. Contact our team for the current connection status of each channel."],
   ["Can I use my own WhatsApp number?", "WhatsApp messaging requires your own WhatsApp Business Platform account, approved templates and guest opt-in. Until that is configured, messages remain in demo mode."],
   ["How is room count measured?", "Plans are packaged per sellable room per month. Enterprise is quoted per portfolio."],
 ];

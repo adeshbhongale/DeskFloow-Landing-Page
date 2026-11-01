@@ -1,12 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Check, X } from "lucide-react";
-import { SectionHeading } from "@/components/ui/reveal";
+import { SectionHeading, Reveal } from "@/components/ui/reveal";
 import { Logo } from "@/components/ui/logo";
-
-const fragmented = ["Multiple disconnected tools", "Manual reservation updates", "Repeated guest data entry", "Separate housekeeping coordination", "Scattered guest conversations"];
-const unified = ["Unified operations workspace", "Centralised reservation visibility", "Connected guest profiles", "Coordinated room readiness", "Centralised guest communication"];
 
 const rows = [
   ["Reservation visibility", "Spread across channel extranets, spreadsheets and paper", "One reservation list and tape chart for every source"],
@@ -20,59 +16,72 @@ const rows = [
   ["Multi-property oversight", "Separate logins per property", "Switch properties from one account"],
 ];
 
-/** Signature animation 10 — fragmented workflow vs DeskFloow. */
+/** Comparison table — fragmented workflow vs DeskFloow. */
 export function Comparison() {
   return (
     <section className="py-24 sm:py-32">
       <div className="container-x">
-        <SectionHeading align="center" eyebrow="Why unified matters" title="Fewer tools. Fewer handoffs. One source of truth." lead="A neutral look at the difference between running a hotel on disconnected tools and running it from one connected workspace." />
-        <div className="mt-14 grid gap-5 md:grid-cols-2">
-          <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="rounded-3xl border border-line bg-white p-7">
-            <p className="text-[13px] font-semibold tracking-wide text-muted-foreground uppercase">Traditional fragmented workflow</p>
-            <ul className="mt-6 space-y-3.5">
-              {fragmented.map((t, i) => (
-                <motion.li key={t} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.07 }} className="flex items-center gap-3 text-[15px] text-ink/70">
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-rose-50 text-danger"><X className="size-3.5" strokeWidth={3} aria-label="No" /></span>
-                  {t}
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="relative overflow-hidden rounded-3xl bg-brand-900 p-7 text-white shadow-lift">
-            <div className="pointer-events-none absolute -top-20 -right-20 size-64 rounded-full bg-brand-500/40 blur-3xl" />
-            <div className="relative flex items-center gap-3"><Logo tone="light" height={26} /><span className="text-[13px] font-semibold tracking-wide text-white/60 uppercase">workflow</span></div>
-            <ul className="relative mt-6 space-y-3.5">
-              {unified.map((t, i) => (
-                <motion.li key={t} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.07 }} className="flex items-center gap-3 text-[15px]">
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-emerald-400/20 text-emerald-300"><Check className="size-3.5" strokeWidth={3} aria-label="Yes" /></span>
-                  {t}
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
+        <SectionHeading
+          align="center"
+          eyebrow="Why unified matters"
+          title="Fewer tools. Fewer handoffs. One source of truth."
+          lead="A neutral look at the difference between running a hotel on disconnected tools and running it from one connected workspace."
+        />
 
-        <div className="mt-10 overflow-x-auto rounded-3xl border border-line bg-white scrollbar-thin">
-          <table className="w-full min-w-[720px] text-left text-[14px]">
-            <caption className="sr-only">Fragmented workflows compared with DeskFloow</caption>
-            <thead>
-              <tr className="border-b border-line bg-brand-50/60">
-                <th scope="col" className="px-5 py-4 font-semibold">Area</th>
-                <th scope="col" className="px-5 py-4 font-semibold text-muted-foreground">Fragmented workflow</th>
-                <th scope="col" className="px-5 py-4 font-semibold text-brand-700">DeskFloow</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(([a, b, c]) => (
-                <tr key={a} className="border-b border-line last:border-0">
-                  <th scope="row" className="px-5 py-3.5 font-medium">{a}</th>
-                  <td className="px-5 py-3.5 text-muted-foreground"><span className="flex gap-2"><X className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />{b}</span></td>
-                  <td className="px-5 py-3.5"><span className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-brand-600" aria-hidden />{c}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Reveal delay={0.08} className="mt-12">
+          <div className="overflow-hidden rounded-3xl border border-brand-200/80 bg-white shadow-lift ring-1 ring-brand-100/70">
+            <div className="h-1 w-full bg-gradient-to-r from-brand-600 via-brand-500 to-gold-400" aria-hidden />
+
+            <div className="overflow-x-auto scrollbar-thin">
+              <table className="w-full min-w-[680px] border-collapse text-left text-[14.5px]">
+                <caption className="sr-only">Fragmented workflows compared with DeskFloow</caption>
+                <thead>
+                  <tr className="border-b border-brand-200/70 bg-brand-50/50">
+                    <th scope="col" className="w-[24%] px-6 py-4.5 text-[12.5px] font-bold tracking-wider text-muted-foreground uppercase">
+                      Operational Area
+                    </th>
+                    <th scope="col" className="w-[38%] px-6 py-4.5 text-[12.5px] font-bold tracking-wider text-muted-foreground uppercase">
+                      Fragmented Workflow
+                    </th>
+                    <th scope="col" className="w-[38%] border-l border-brand-200/70 bg-brand-100/60 px-6 py-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <Logo height={24} />
+                        <span className="rounded-full border border-gold-300/80 bg-gold-100 px-2.5 py-0.5 text-[11px] font-semibold text-brand-950">
+                          Unified Platform
+                        </span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-brand-100/80">
+                  {rows.map(([area, fragmentedText, unifiedText]) => (
+                    <tr key={area} className="transition-colors hover:bg-brand-50/25">
+                      <th scope="row" className="px-6 py-4 font-semibold text-ink align-top">
+                        {area}
+                      </th>
+                      <td className="px-6 py-4 text-muted-foreground align-top leading-relaxed">
+                        <span className="flex items-start gap-2.5">
+                          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-rose-50 text-danger ring-1 ring-rose-200/70">
+                            <X className="size-3" strokeWidth={2.75} aria-label="Fragmented limitation" />
+                          </span>
+                          <span>{fragmentedText}</span>
+                        </span>
+                      </td>
+                      <td className="border-l border-brand-200/60 bg-brand-50/45 px-6 py-4 font-medium text-ink align-top leading-relaxed">
+                        <span className="flex items-start gap-2.5">
+                          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-600 text-white shadow-2xs">
+                            <Check className="size-3" strokeWidth={2.75} aria-label="Included in DeskFloow" />
+                          </span>
+                          <span>{unifiedText}</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

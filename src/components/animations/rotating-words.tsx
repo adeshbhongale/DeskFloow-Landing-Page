@@ -9,34 +9,56 @@ import { cn } from "@/lib/utils";
  * All phrases are stacked in one grid cell so the width never shifts.
  * Pauses on hover/focus, when the tab is hidden, and under reduced motion.
  */
-export function RotatingWords({ words, className, interval = 2600 }: { words: string[]; className?: string; interval?: number }) {
-  const [i, setI] = useState(0);
+export function RotatingWords({
+  words,
+  className,
+  interval = 3400,
+  activeIndex,
+  onIndexChange,
+}: {
+  words: string[];
+  className?: string;
+  interval?: number;
+  activeIndex?: number;
+  onIndexChange?: (index: number) => void;
+}) {
+  const [internalIdx, setInternalIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const reduce = useReducedMotion();
 
+  const i = activeIndex !== undefined ? activeIndex : internalIdx;
+
   useEffect(() => {
     if (paused || reduce) return;
-    const id = setInterval(() => !document.hidden && setI((n) => (n + 1) % words.length), interval);
+    const id = setInterval(() => {
+      if (document.hidden) return;
+      const next = (i + 1) % words.length;
+      if (onIndexChange) {
+        onIndexChange(next);
+      } else {
+        setInternalIdx(next);
+      }
+    }, interval);
     return () => clearInterval(id);
-  }, [paused, reduce, interval, words.length]);
+  }, [paused, reduce, interval, words.length, i, onIndexChange]);
 
   return (
     <span
-      className="relative inline-grid overflow-hidden py-1 -my-1 align-bottom"
+      className="relative inline-grid overflow-hidden py-2.5 -my-2 align-bottom leading-[1.28]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-live="polite"
     >
       {/* sizing ghosts */}
       {words.map((w) => (
-        <span key={w} className="invisible col-start-1 row-start-1 py-0.5" aria-hidden>
+        <span key={w} className="invisible col-start-1 row-start-1 py-1.5 leading-[1.28]" aria-hidden>
           {w}
         </span>
       ))}
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={words[i]}
-          className={cn("col-start-1 row-start-1 py-0.5", className)}
+          className={cn("col-start-1 row-start-1 py-1.5 leading-[1.28]", className)}
           initial={{ y: "100%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
