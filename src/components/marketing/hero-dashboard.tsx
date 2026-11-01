@@ -98,25 +98,21 @@ const kpiCards: KpiCardData[] = [
  */
 export function HeroDashboard() {
   const [order, setOrder] = useState<number[]>(() => kpiCards.map((_, i) => i));
-  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
-    const id = setTimeout(() => {
+    const id = setInterval(() => {
       if (!document.hidden) {
         setOrder((prev) => [...prev.slice(1), prev[0]]);
       }
-    }, 2800);
-    return () => clearTimeout(id);
-  }, [order, paused]);
+    }, 2400);
+    return () => clearInterval(id);
+  }, []);
 
   const visibleCards = order.slice(0, 3);
 
   return (
     <div
       className="relative flex flex-col gap-5 sm:gap-6"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       aria-label="Live hotel KPI cards"
       role="region"
     >

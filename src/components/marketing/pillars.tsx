@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { type ReactNode } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, CalendarCheck, Check, ShieldCheck, Sparkles } from "lucide-react";
 import { FrontDeskDashboard } from "@/components/dashboard/front-desk";
 import { TapeChart } from "@/components/dashboard/tape-chart";
@@ -9,13 +10,15 @@ import { FloorPlan } from "@/components/dashboard/floor-plan";
 import { GuestCrm } from "@/components/dashboard/guest-crm";
 import { FolioView, ShiftRegister } from "@/components/dashboard/folio";
 import { PropertySwitcher } from "@/components/dashboard/multi-property";
-import { WhatsAppInbox, WhatsAppWorkflow } from "@/components/messaging/whatsapp-inbox";
+import { WhatsAppInbox } from "@/components/messaging/whatsapp-inbox";
 import { OrderBoard } from "@/components/orders/order-board";
 import { OtaSync } from "./ota-sync";
 import { ProductTour } from "./product-tour";
-import { SectionHeading, Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/reveal";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const smoothEase = [0.22, 1, 0.36, 1] as const;
 
 export function Pillar({
   id,
@@ -34,20 +37,47 @@ export function Pillar({
   className?: string;
   aside?: ReactNode;
 }) {
+  const reduce = useReducedMotion();
+
   return (
-    <section id={id} className={cn("scroll-mt-20 py-20 sm:py-28", className)}>
+    <motion.section
+      id={id}
+      initial={reduce ? false : { opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.7, ease: smoothEase }}
+      className={cn("scroll-mt-20 py-20 sm:py-28", className)}
+    >
       <div className="container-x">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: smoothEase }}
+          className="flex flex-wrap items-end justify-between gap-6"
+        >
           <SectionHeading eyebrow={eyebrow} title={title} lead={lead} />
           {aside ?? (
-            <span className="chip bg-brand-100/90 text-brand-700 font-semibold px-3 py-1">
+            <motion.span
+              whileHover={{ scale: 1.04, y: -2 }}
+              transition={{ type: "spring", stiffness: 320, damping: 20 }}
+              className="chip bg-brand-100/90 text-brand-700 font-semibold px-3 py-1 shadow-2xs"
+            >
               <Sparkles className="size-3 text-gold-500" /> Interactive Product Preview
-            </span>
+            </motion.span>
           )}
-        </div>
-        <Reveal className="mt-10" y={28}>{children}</Reveal>
+        </motion.div>
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 32, scale: 0.985 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.08 }}
+          transition={{ duration: 0.75, delay: 0.1, ease: smoothEase }}
+          className="mt-10"
+        >
+          {children}
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -81,8 +111,17 @@ export function TapeChartPillar() {
 }
 
 export function ChannelsPillar() {
+  const reduce = useReducedMotion();
+
   return (
-    <section id="channels" className="relative scroll-mt-20 overflow-hidden bg-brand-950 py-24 text-white sm:py-32">
+    <motion.section
+      id="channels"
+      initial={reduce ? false : { opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.7, ease: smoothEase }}
+      className="relative scroll-mt-20 overflow-hidden bg-brand-950 py-24 text-white sm:py-32"
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgb(153_85_255/0.35),transparent_55%),radial-gradient(ellipse_at_90%_100%,rgb(251_191_36/0.15),transparent_50%)]" />
       <div className="grid-bg pointer-events-none absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
       <div className="container-x relative">
@@ -92,25 +131,41 @@ export function ChannelsPillar() {
           title={<>Every booking channel. <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-amber-300 bg-clip-text text-transparent">One source of truth.</span></>}
           lead="Bring your direct reservations and connected online travel agencies into a unified inventory workflow designed to eliminate manual updates and prevent costly double bookings."
         />
-        <div className="mt-14"><OtaSync /></div>
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.12 }}
+          transition={{ duration: 0.75, delay: 0.1, ease: smoothEase }}
+          className="mt-14"
+        >
+          <OtaSync />
+        </motion.div>
         <div className="mt-16 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Channel adapters", "Dedicated 2-way connectors for Booking.com, Airbnb, Expedia, Agoda, MakeMyTrip and Goibibo."],
             ["Idempotent ingestion", "Webhooks and rate pushes are atomic and de-duplicated to guarantee zero ghost bookings."],
             ["Instant rate & stop-sell", "Change rates or close dates once in DeskFloow; updates push to all channels in under 1 second."],
             ["Audit & reconciliation", "Every sync event is recorded in a tamper-proof log with instant error notifications."],
-          ].map(([t, d]) => (
-            <div key={t} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+          ].map(([t, d], i) => (
+            <motion.div
+              key={t}
+              initial={reduce ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, delay: i * 0.08, ease: smoothEase }}
+              whileHover={{ y: -4 }}
+              className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors hover:bg-white/[0.07]"
+            >
               <p className="text-[14px] font-semibold text-white">{t}</p>
               <p className="mt-1.5 text-[13px] text-white/60 leading-relaxed">{d}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
         <p className="mt-5 text-[12.5px] text-white/50 flex items-center gap-1.5">
           <ShieldCheck className="size-4 text-emerald-400" /> High-concurrency 2-way synchronization architecture with 99.9% uptime SLA.
         </p>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -120,10 +175,9 @@ export function WhatsAppPillar() {
       id="whatsapp"
       eyebrow="WhatsApp booking confirmation campaign service"
       title="Automated hotel booking confirmations on WhatsApp."
-      lead="Like an automated email campaign service built for hotels, DeskFloow dispatches verified one-way WhatsApp booking confirmation messages the instant a reservation is confirmed — complete with booking ID, stay dates, room type, and live delivery status."
+      lead="Watch DeskFloow automatically compose and send a verified WhatsApp booking confirmation message to the guest the instant a hotel reservation is confirmed — complete with booking ID, stay dates, room assignment, and live read receipts."
     >
       <WhatsAppInbox />
-      <div className="mt-6"><WhatsAppWorkflow /></div>
     </Pillar>
   );
 }
@@ -168,7 +222,7 @@ export function HousekeepingPillar() {
       id="housekeeping"
       eyebrow="Visual floor plan & housekeeping"
       title="Know the status of every room at a single glance."
-      lead="Select any room to update its status from dirty to cleaning to clean — changes instantly synchronize with the tape chart and arrivals check-in guard."
+      lead="Watch or interact with our guided drag-and-drop floor plan builder & housekeeping workflow — create rooms on the grid, drag guests and attendants into place, and sync room readiness across the front desk."
       className="bg-white"
     >
       <FloorPlan />
@@ -182,7 +236,7 @@ export function CrmPillar() {
       id="crm"
       eyebrow="Guest CRM & loyalty"
       title="Recognise the guest behind every reservation."
-      lead="Build lasting guest relationships with central profiles, automated VIP recognition, dietary preferences, special anniversary notes, and lifetime spend tracking."
+      lead="Explore DeskFloow's 360° guest intelligence — KYC records, VIP loyalty tiers, dietary & sleep preferences, anniversary alerts, multi-property stay history, and folio spend analytics."
     >
       <GuestCrm />
     </Pillar>
@@ -190,8 +244,17 @@ export function CrmPillar() {
 }
 
 export function BookingPillar() {
+  const reduce = useReducedMotion();
+
   return (
-    <section id="booking" className="scroll-mt-20 py-20 sm:py-28 bg-brand-50/40">
+    <motion.section
+      id="booking"
+      initial={reduce ? false : { opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.7, ease: smoothEase }}
+      className="scroll-mt-20 py-20 sm:py-28 bg-brand-50/40"
+    >
       <div className="container-x grid items-center gap-12 lg:grid-cols-2">
         <SectionHeading
           eyebrow="Direct booking engine"
@@ -219,7 +282,13 @@ export function BookingPillar() {
           </div>
         </SectionHeading>
 
-        <Reveal className="relative">
+        <motion.div
+          initial={reduce ? false : { opacity: 0, scale: 0.96, y: 24 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.75, ease: smoothEase }}
+          className="relative"
+        >
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[420px] overflow-hidden rounded-[32px] shadow-lift">
             <Image
               src="/images/boutique-room.jpg"
@@ -253,9 +322,9 @@ export function BookingPillar() {
               </p>
             </div>
           </div>
-        </Reveal>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

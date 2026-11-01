@@ -10,12 +10,10 @@ import {
   CheckCircle2,
   Crown,
   Globe2,
-  HeartHandshake,
   Layers,
   MessageCircle,
   Network,
   RefreshCw,
-  ShieldCheck,
   Sparkles,
   UsersRound,
   UtensilsCrossed,
@@ -95,37 +93,6 @@ const capabilities = [
     label: "Guest CRM, Orders & Analytics",
     stat: "360° Guest Profiles",
     desc: "Preferences, repeat stay history, room-service order boards, and daily occupancy & ADR dashboards.",
-  },
-];
-
-const pillars = [
-  {
-    icon: Layers,
-    title: "One Connected Record",
-    tag: "Unified Architecture",
-    description:
-      "Instead of juggling disconnected extranets, spreadsheets, and chat groups, every reservation, room status, folio, and guest note lives in one unified workspace.",
-  },
-  {
-    icon: Sparkles,
-    title: "Front-Line Simplicity",
-    tag: "Zero Clutter UI",
-    description:
-      "Designed so receptionists, night auditors, and housekeeping attendants can master daily workflows in minutes without complex enterprise training.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Hospitality-First Engineering",
-    tag: "Built for Hotels",
-    description:
-      "Built around real hotel operations—dirty-room check-in guards, split folios, shift handovers, and instant WhatsApp booking confirmations.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Multi-Property Ready",
-    tag: "Portfolio Control",
-    description:
-      "Switch between boutique inns, resorts, or city hotels from a single account with role-based permissions and audit traceability.",
   },
 ];
 
@@ -347,54 +314,6 @@ export function AboutShowcase() {
                 </motion.div>
               );
             })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Animated Principles Section */}
-      <section className="border-t border-line bg-gradient-to-b from-brand-50/50 to-white py-20 sm:py-28">
-        <div className="container-x">
-          <SectionHeading
-            align="center"
-            eyebrow="How We Build"
-            title="Principles behind the DeskFloow platform."
-            lead="Every workflow in DeskFloow is designed around clarity, speed, and operational accuracy."
-          />
-
-          <motion.div
-            variants={staggerGrid}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.15 }}
-            className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {pillars.map((p) => (
-              <motion.article
-                key={p.title}
-                variants={cardVariant}
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                className="group card relative flex flex-col justify-between overflow-hidden border border-brand-200/80 bg-white p-6 shadow-sm hover:border-brand-400 hover:shadow-lift"
-              >
-                <div className="pointer-events-none absolute -bottom-10 -right-10 size-24 rounded-full bg-gold-300/20 blur-2xl transition-opacity group-hover:opacity-100 opacity-0" />
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="grid size-11 place-items-center rounded-xl bg-brand-100 text-brand-700 transition-all duration-300 group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white">
-                      <p.icon className="size-5" aria-hidden />
-                    </span>
-                    <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-[11px] font-semibold text-brand-700">
-                      {p.tag}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-[18px] font-bold tracking-tight text-ink">{p.title}</h3>
-                  <p className="mt-2.5 text-[14px] leading-relaxed text-muted-foreground">{p.description}</p>
-                </div>
-                <div
-                  className="mt-6 h-1 w-10 rounded-full bg-gradient-to-r from-brand-500 to-gold-400 transition-all duration-300 group-hover:w-full"
-                  aria-hidden
-                />
-              </motion.article>
-            ))}
           </motion.div>
         </div>
       </section>

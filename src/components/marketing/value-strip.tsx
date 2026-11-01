@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   BedDouble,
@@ -83,6 +83,15 @@ export function ValueStrip() {
   const currentShowcase = workspaceShowcases[activeIdx] ?? workspaceShowcases[0];
   const ShowcaseIcon = currentShowcase.icon;
 
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (!document.hidden) {
+        setActiveIdx((prev) => (prev + 1) % workspaceShowcases.length);
+      }
+    }, 2800);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="relative border-y border-line bg-white py-20">
       <div className="container-x grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
@@ -95,7 +104,6 @@ export function ValueStrip() {
               className="bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent"
               words={rotatingPhrases}
               activeIndex={activeIdx}
-              onIndexChange={setActiveIdx}
             />
           </h2>
           <p className="lead mt-5 max-w-lg">
@@ -178,16 +186,16 @@ export function ValueStrip() {
         <p className="mb-5 text-center text-[12px] font-medium tracking-widest text-muted-foreground uppercase">
           Designed for every kind of stay
         </p>
-        <div className="flex w-max animate-marquee gap-3 hover:[animation-play-state:paused]">
+        <div className="flex w-max animate-marquee gap-3 py-2 hover:[animation-play-state:paused]">
           {[...types, ...types].map((t, i) => {
             const Icon = t.icon;
             return (
               <span
                 key={i}
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-brand-50/50 px-5 py-2 text-[14px] text-ink/70"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-brand-50/50 px-5 py-3.5 text-[15px] leading-relaxed text-ink/75 [transform:scaleY(1.18)]"
                 aria-hidden={i >= types.length}
               >
-                <Icon className="size-4 shrink-0 text-brand-600" aria-hidden />
+                <Icon className="size-4.5 shrink-0 text-brand-600" aria-hidden />
                 {t.label}
               </span>
             );
