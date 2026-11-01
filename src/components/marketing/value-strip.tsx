@@ -93,11 +93,11 @@ export function ValueStrip() {
   }, []);
 
   return (
-    <section className="relative border-y border-line bg-white py-20">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
+    <section className="relative overflow-hidden border-y border-line bg-white py-14 sm:py-20">
+      <div className="container-x grid items-center gap-8 lg:gap-12 lg:grid-cols-[1.1fr_1fr]">
         {/* Left side preserved with clear line height so descenders never clip */}
-        <Reveal>
-          <h2 className="text-[34px] leading-[1.2] font-semibold tracking-[-0.03em] text-ink sm:text-[48px]">
+        <Reveal className="min-w-0">
+          <h2 className="text-[26px] min-[390px]:text-[31px] leading-[1.2] font-semibold tracking-[-0.03em] text-ink sm:text-[48px]">
             One workspace to
             <br />
             <RotatingWords
@@ -106,16 +106,16 @@ export function ValueStrip() {
               activeIndex={activeIdx}
             />
           </h2>
-          <p className="lead mt-5 max-w-lg">
+          <p className="lead mt-4 sm:mt-5 max-w-lg">
             Reservations, room readiness, guest conversations and revenue stay connected — so your team works from one
             clear picture instead of five disconnected tools.
           </p>
         </Reveal>
 
         {/* Right side: Image-based feature showcase synchronized with left side */}
-        <Reveal delay={0.1}>
-          <div className="overflow-hidden rounded-[26px] border border-brand-200/80 bg-gradient-to-br from-brand-50/70 via-white to-gold-100/30 p-3 shadow-lift">
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-brand-950">
+        <Reveal delay={0.1} className="min-w-0">
+          <div className="overflow-hidden rounded-[22px] sm:rounded-[26px] border border-brand-200/80 bg-gradient-to-br from-brand-50/70 via-white to-gold-100/30 p-2.5 sm:p-3 shadow-lift">
+            <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full overflow-hidden rounded-2xl bg-brand-950">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={currentShowcase.phrase}
@@ -134,19 +134,19 @@ export function ValueStrip() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/25 to-transparent" />
 
-                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-brand-950/75 px-3 py-1 text-[11.5px] font-semibold text-white backdrop-blur-md">
-                      <ShowcaseIcon className="size-3.5 text-gold-300" />
-                      {currentShowcase.module}
+                  <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3.5 sm:left-3.5 sm:right-3.5 flex items-center justify-between gap-2">
+                    <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-white/20 bg-brand-950/75 px-2.5 py-1 sm:px-3 text-[11px] sm:text-[11.5px] font-semibold text-white backdrop-blur-md">
+                      <ShowcaseIcon className="size-3.5 shrink-0 text-gold-300" />
+                      <span className="truncate">{currentShowcase.module}</span>
                     </span>
-                    <span className="rounded-full border border-gold-300/40 bg-gold-400/20 px-2.5 py-0.5 text-[11px] font-semibold text-gold-200 backdrop-blur-md">
+                    <span className="hidden min-[420px]:inline-flex shrink-0 rounded-full border border-gold-300/40 bg-gold-400/20 px-2.5 py-0.5 text-[10.5px] sm:text-[11px] font-semibold text-gold-200 backdrop-blur-md">
                       {currentShowcase.badge}
                     </span>
                   </div>
 
-                  <div className="absolute inset-x-3.5 bottom-3.5 rounded-xl border border-white/15 bg-brand-950/80 p-3.5 text-white backdrop-blur-md">
-                    <p className="text-[13px] font-semibold text-gold-300">{currentShowcase.phrase}</p>
-                    <p className="mt-0.5 text-[12.5px] leading-snug text-white/90">{currentShowcase.caption}</p>
+                  <div className="absolute inset-x-2.5 bottom-2.5 sm:inset-x-3.5 sm:bottom-3.5 rounded-xl border border-white/15 bg-brand-950/85 p-2.5 sm:p-3.5 text-white backdrop-blur-md">
+                    <p className="text-[12.5px] sm:text-[13px] font-semibold text-gold-300">{currentShowcase.phrase}</p>
+                    <p className="mt-0.5 text-[11.5px] sm:text-[12.5px] leading-snug text-white/90">{currentShowcase.caption}</p>
                   </div>
                 </motion.div>
               </AnimatePresence>

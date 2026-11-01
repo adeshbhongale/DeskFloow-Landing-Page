@@ -26,14 +26,14 @@ export function KpiCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 xl:grid-cols-6">
       {kpis.map((k) => (
-        <div key={k.label} className={cn("card p-4", k.accent && "border-primary/40 ring-1 ring-primary/30")}>
-          <p className="flex items-center justify-between text-[12px] font-medium text-muted-foreground">
-            {k.label}
-            <k.icon className={cn("size-4", k.accent ? "text-primary" : "text-muted-foreground")} />
+        <div key={k.label} className={cn("card min-w-0 overflow-hidden p-3 sm:p-4", k.accent && "border-primary/40 ring-1 ring-primary/30")}>
+          <p className="flex items-center justify-between gap-1 text-[11.5px] sm:text-[12px] font-medium text-muted-foreground">
+            <span className="truncate">{k.label}</span>
+            <k.icon className={cn("size-3.5 sm:size-4 shrink-0", k.accent ? "text-primary" : "text-muted-foreground")} />
           </p>
-          <CountUp value={k.value} format={k.fmt} className="mt-2 block text-[22px] font-semibold tracking-tight text-foreground" />
+          <CountUp value={k.value} format={k.fmt} className="mt-1.5 sm:mt-2 block truncate text-[18px] sm:text-[22px] font-semibold tracking-tight text-foreground" />
         </div>
       ))}
     </div>
@@ -66,11 +66,11 @@ export function GuestAlerts() {
   });
 
   return (
-    <div className="card p-4">
+    <div className="card min-w-0 overflow-hidden p-3.5 sm:p-4">
       <h4 className="mb-3 text-[13.5px] font-semibold text-foreground">Guest alerts &amp; preferences</h4>
       <ul className="space-y-2">
         {alerts.slice(0, 5).map((a) => (
-          <li key={a.id} className="flex items-center gap-3 rounded-xl border border-border/50 bg-card/60 p-2.5">
+          <li key={a.id} className="flex items-center gap-2.5 sm:gap-3 rounded-xl border border-border/50 bg-card/60 p-2.5">
             <span className={cn("grid size-8 shrink-0 place-items-center rounded-lg", a.tone)}>
               <a.icon className="size-4" />
             </span>
@@ -78,7 +78,7 @@ export function GuestAlerts() {
               <span className="block text-[13px] font-medium text-foreground">{a.kind}</span>
               <span className="block truncate text-[12px] text-muted-foreground">{a.text}</span>
             </span>
-            <span className="chip bg-muted text-[11px] font-mono text-muted-foreground">{a.res.id}</span>
+            <span className="chip shrink-0 bg-muted text-[10.5px] sm:text-[11px] font-mono text-muted-foreground">{a.res.id}</span>
           </li>
         ))}
       </ul>
@@ -91,15 +91,15 @@ export function HousekeepingOverview() {
   const statuses: HousekeepingStatus[] = ["clean", "cleaning", "dirty", "out-of-order"];
 
   return (
-    <div className="card p-4">
+    <div className="card min-w-0 overflow-hidden p-3.5 sm:p-4">
       <h4 className="mb-3 text-[13.5px] font-semibold text-foreground">Housekeeping live status</h4>
       <div className="grid grid-cols-2 gap-2">
         {statuses.map((s) => {
           const n = rooms.filter((r) => r.housekeeping === s).length;
           return (
-            <div key={s} className="rounded-xl border border-border/70 bg-card/50 p-3">
+            <div key={s} className="min-w-0 overflow-hidden rounded-xl border border-border/70 bg-card/50 p-2.5 sm:p-3">
               <HkBadge status={s} />
-              <p className="mt-2 text-[22px] font-semibold text-foreground">{n}</p>
+              <p className="mt-2 text-[20px] sm:text-[22px] font-semibold text-foreground">{n}</p>
               <p className="truncate text-[11.5px] text-muted-foreground">
                 {rooms.filter((r) => r.housekeeping === s).map((r) => r.number).join(", ") || "—"}
               </p>
@@ -127,11 +127,11 @@ export function ArrivalsPanel() {
   const rooms = snap.rooms;
 
   return (
-    <div className="card p-4">
-      <div className="mb-3 flex items-center justify-between">
+    <div className="card min-w-0 overflow-hidden p-3.5 sm:p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-1.5">
         <h4 className="text-[13.5px] font-semibold text-foreground">Today&apos;s arrivals</h4>
         <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-          <ShieldCheck className="size-3.5 text-emerald-500" /> Automated room verification
+          <ShieldCheck className="size-3.5 shrink-0 text-emerald-500" /> Automated room verification
         </span>
       </div>
       <ul className="space-y-2">
@@ -140,15 +140,15 @@ export function ArrivalsPanel() {
           const g = guestOf(r.guestId);
           const room = rooms.find((x) => x.id === r.roomId)!;
           return (
-            <li key={r.id} className="rounded-xl border border-border/70 bg-card/50 p-3">
+            <li key={r.id} className="rounded-xl border border-border/70 bg-card/50 p-2.5 sm:p-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <p className="text-[13.5px] font-medium text-foreground">{g.name}</p>
-                  <p className="text-[12px] text-muted-foreground">
+                <div className="min-w-0">
+                  <p className="truncate text-[13.5px] font-medium text-foreground">{g.name}</p>
+                  <p className="truncate text-[12px] text-muted-foreground">
                     {r.id} · Room {room.number} · {r.source}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   <HkBadge status={room.housekeeping} />
                   {i === 0 ? (
                     <ResBadge status="checked-in" />
@@ -167,19 +167,19 @@ export function ArrivalsPanel() {
 
 export function FrontDeskDashboard({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="grid gap-4">
+    <div className="grid min-w-0 gap-3 sm:gap-4">
       <KpiCards />
-      <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
+      <div className="grid min-w-0 gap-3 sm:gap-4 lg:grid-cols-[1.6fr_1fr]">
         <RevenueChart />
         <SourceDonut />
       </div>
       {!compact && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid min-w-0 gap-3 sm:gap-4 lg:grid-cols-2">
           <OccupancyChart />
           <CategoryChart />
         </div>
       )}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid min-w-0 gap-3 sm:gap-4 lg:grid-cols-3">
         <ArrivalsPanel />
         <GuestAlerts />
         <HousekeepingOverview />

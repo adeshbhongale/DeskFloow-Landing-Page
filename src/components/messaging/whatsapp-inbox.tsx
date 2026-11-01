@@ -150,12 +150,12 @@ export function WhatsAppInbox() {
   const activeImage = WHATSAPP_IMAGES[activeImageIdx];
 
   return (
-    <div ref={containerRef} className="space-y-6">
+    <div ref={containerRef} className="min-w-0 space-y-6">
       {/* Main Grid: Live Animated iPhone Mobile App UI + 3 Branded Mobile App UI Images */}
-      <div className="grid items-start gap-6 lg:grid-cols-[380px_1fr]">
+      <div className="grid min-w-0 items-start gap-6 lg:grid-cols-[380px_1fr]">
         {/* Left: iPhone Mobile App UI Frame with Live Booking / Check-In / Check-Out Animation */}
-        <div className="mx-auto w-full max-w-[370px]">
-          <div className="relative rounded-[52px] border-[4px] border-slate-600 bg-[#090D16] p-2.5 shadow-2xl">
+        <div className="mx-auto w-full min-w-0 max-w-[340px] sm:max-w-[370px] px-1.5 sm:px-0">
+          <div className="relative rounded-[44px] sm:rounded-[52px] border-[4px] border-slate-600 bg-[#090D16] p-2 sm:p-2.5 shadow-2xl">
             <span className="pointer-events-none absolute top-28 -left-[6px] h-9 w-[3px] rounded-l bg-slate-600" />
             <span className="pointer-events-none absolute top-40 -left-[6px] h-14 w-[3px] rounded-l bg-slate-600" />
             <span className="pointer-events-none absolute top-36 -right-[6px] h-18 w-[3px] rounded-r bg-slate-600" />
@@ -330,8 +330,8 @@ export function WhatsAppInbox() {
         </div>
 
         {/* Right: 3 Mobile App UI Images Gallery + Interactive Guest Trigger Controls */}
-        <div className="space-y-4">
-          <div className="card overflow-hidden p-4">
+        <div className="min-w-0 space-y-4">
+          <div className="card min-w-0 overflow-hidden p-3 sm:p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Guest message mobile UI views">
                 {WHATSAPP_IMAGES.map((img, idx) => {
@@ -344,7 +344,7 @@ export function WhatsAppInbox() {
                       aria-selected={active}
                       onClick={() => setActiveImageIdx(idx)}
                       className={cn(
-                        "rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition",
+                        "rounded-full px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-[12px] font-semibold transition",
                         active
                           ? "bg-[#008069] text-white shadow-xs"
                           : "bg-emerald-50 text-[#008069] hover:bg-emerald-100",

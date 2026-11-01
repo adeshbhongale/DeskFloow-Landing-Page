@@ -110,23 +110,25 @@ export function SourceDonut() {
 
   return (
     <ChartCard title="Booking sources">
-      <div className="flex items-center gap-4">
-        <ResponsiveContainer width="50%" height={170}>
-          <PieChart>
-            <Pie data={data} dataKey="value" nameKey="name" innerRadius={45} outerRadius={70} paddingAngle={3} stroke="none">
-              {data.map((_, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
-            </Pie>
-            <Tooltip contentStyle={tooltipStyle} />
-          </PieChart>
-        </ResponsiveContainer>
-        <ul className="flex-1 space-y-1.5 text-[12px]">
+      <div className="flex flex-col min-[440px]:flex-row items-center gap-3 sm:gap-4">
+        <div className="h-[150px] w-full min-[440px]:w-[46%] sm:h-[170px] sm:w-1/2">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie data={data} dataKey="value" nameKey="name" innerRadius={40} outerRadius={64} paddingAngle={3} stroke="none">
+                {data.map((_, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
+              </Pie>
+              <Tooltip contentStyle={tooltipStyle} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <ul className="w-full min-w-0 flex-1 space-y-1.5 text-[12px]">
           {data.map((d, i) => (
             <li key={d.name} className="flex items-center justify-between gap-2">
-              <span className="flex items-center gap-2 truncate">
+              <span className="flex min-w-0 items-center gap-2 truncate">
                 <span className="size-2 shrink-0 rounded-full" style={{ background: PALETTE[i % PALETTE.length] }} />
-                <span className="text-foreground">{d.name}</span>
+                <span className="truncate text-foreground">{d.name}</span>
               </span>
-              <span className="font-semibold text-foreground">{d.value}</span>
+              <span className="shrink-0 font-semibold text-foreground">{d.value}</span>
             </li>
           ))}
         </ul>
@@ -180,9 +182,9 @@ export function CategoryChart() {
 
 function ChartCard({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="card p-4">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <h4 className="text-[13.5px] font-bold text-foreground">{title}</h4>
+    <div className="card min-w-0 overflow-hidden p-3.5 sm:p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h4 className="text-[13px] sm:text-[13.5px] font-bold text-foreground">{title}</h4>
         {action}
       </div>
       {children}

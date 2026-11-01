@@ -19,7 +19,7 @@ const rows = [
 /** Comparison table — fragmented workflow vs DeskFloow. */
 export function Comparison() {
   return (
-    <section className="py-24 sm:py-32">
+    <section className="py-16 sm:py-32">
       <div className="container-x">
         <SectionHeading
           align="center"
@@ -28,8 +28,47 @@ export function Comparison() {
           lead="A neutral look at the difference between running a hotel on disconnected tools and running it from one connected workspace."
         />
 
-        <Reveal delay={0.08} className="mt-12">
-          <div className="overflow-hidden rounded-3xl border border-brand-200/80 bg-white shadow-lift ring-1 ring-brand-100/70">
+        <Reveal delay={0.08} className="mt-10 sm:mt-12 min-w-0">
+          {/* Mobile Stacked Comparison Cards (no horizontal scroll required) */}
+          <div className="grid gap-3 md:hidden">
+            {rows.map(([area, fragmentedText, unifiedText]) => (
+              <div
+                key={area}
+                className="overflow-hidden rounded-2xl border border-brand-200/80 bg-white shadow-sm"
+              >
+                <div className="border-b border-brand-100 bg-brand-50/60 px-4 py-2.5 text-[13.5px] font-bold text-ink">
+                  {area}
+                </div>
+                <div className="divide-y divide-brand-100/70 p-3.5 space-y-2.5 text-[13px]">
+                  <div className="flex items-start gap-2.5 text-muted-foreground pb-2.5">
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-rose-50 text-danger ring-1 ring-rose-200/70">
+                      <X className="size-3" strokeWidth={2.75} aria-label="Fragmented limitation" />
+                    </span>
+                    <div>
+                      <span className="block text-[10.5px] font-bold uppercase tracking-wider text-muted-foreground/80">
+                        Fragmented Workflow
+                      </span>
+                      <span>{fragmentedText}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5 font-medium text-ink pt-0.5">
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-600 text-white shadow-2xs">
+                      <Check className="size-3" strokeWidth={2.75} aria-label="Included in DeskFloow" />
+                    </span>
+                    <div>
+                      <span className="block text-[10.5px] font-bold uppercase tracking-wider text-brand-700">
+                        DeskFloow Unified Platform
+                      </span>
+                      <span>{unifiedText}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop / Tablet Full Comparison Table */}
+          <div className="hidden md:block overflow-hidden rounded-3xl border border-brand-200/80 bg-white shadow-lift ring-1 ring-brand-100/70">
             <div className="h-1 w-full bg-gradient-to-r from-brand-600 via-brand-500 to-gold-400" aria-hidden />
 
             <div className="overflow-x-auto scrollbar-thin">

@@ -5,8 +5,8 @@ import { Reveal } from "@/components/ui/reveal";
 
 export function FinalCta() {
   return (
-    <section className="px-4 py-20 sm:px-6">
-      <Reveal className="relative mx-auto max-w-[1240px] overflow-hidden rounded-[36px] bg-gradient-to-br from-brand-900 via-brand-950 to-brand-950 px-6 py-20 text-center text-white sm:px-16 shadow-2xl">
+    <section className="px-4 py-14 sm:px-6 sm:py-20">
+      <Reveal className="relative mx-auto max-w-[1240px] overflow-hidden rounded-[26px] sm:rounded-[36px] bg-gradient-to-br from-brand-900 via-brand-950 to-brand-950 px-5 py-12 text-center text-white sm:px-16 sm:py-20 shadow-2xl">
         <Image
           src="/images/resort.jpg"
           alt="DeskFloow Luxury Resort Technology"
@@ -19,24 +19,24 @@ export function FinalCta() {
         <div className="absolute -top-24 left-1/2 size-[460px] -translate-x-1/2 rounded-full bg-brand-500/35 blur-[110px]" />
 
         <div className="relative">
-          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-gold-400/30 bg-gold-400/10 px-4 py-1 text-[12px] font-semibold tracking-wider text-gold-300 uppercase">
+          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-gold-400/30 bg-gold-400/10 px-3.5 py-1 text-[11px] sm:text-[12px] font-semibold tracking-wider text-gold-300 uppercase">
             Transform Your Hotel Operations
           </div>
-          <h2 className="mx-auto max-w-3xl text-[36px] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[56px]">
+          <h2 className="mx-auto max-w-3xl text-[26px] leading-[1.12] font-bold tracking-[-0.03em] text-balance sm:text-[56px]">
             Make every part of your hotel work <span className="bg-gradient-to-r from-gold-300 via-gold-400 to-amber-400 bg-clip-text text-transparent">in perfect flow.</span>
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[17px] text-white/75 leading-relaxed">
+          <p className="mx-auto mt-4 sm:mt-5 max-w-xl text-[15px] sm:text-[17px] text-white/75 leading-relaxed">
             Bring front-desk operations, reservations, room management, housekeeping, guest profiles, billing, and WhatsApp confirmations into one connected workspace.
           </p>
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <ButtonLink href="/book-demo" variant="gold" size="lg">
+          <div className="mt-7 sm:mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+            <ButtonLink href="/book-demo" variant="gold" size="lg" className="w-full sm:w-auto">
               <CalendarCheck className="size-4.5" /> Book a Personalized Demo <ArrowRight className="size-4" />
             </ButtonLink>
-            <ButtonLink href="/contact" variant="light" size="lg">
+            <ButtonLink href="/contact" variant="light" size="lg" className="w-full sm:w-auto">
               <MessageSquare className="size-4" /> Contact Us
             </ButtonLink>
           </div>
-          <p className="mt-6 text-[13px] text-white/50">
+          <p className="mt-5 sm:mt-6 text-[12px] sm:text-[13px] text-white/50">
             Unified PMS workspace · Multi-property ready · Tailored guided walkthroughs
           </p>
         </div>

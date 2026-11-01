@@ -48,16 +48,16 @@ export function FolioView({ reservationId }: { reservationId: string }) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border/80 bg-muted/30 p-3 text-[12.5px]">
+      <div className="rounded-xl border border-border/80 bg-muted/30 p-3 text-[12.5px] break-words">
         <p className="font-semibold text-foreground">{f.guest.name}</p>
         <p className="text-muted-foreground">{shortDate(f.res.checkIn)} → {shortDate(f.res.checkOut)} · {f.guest.email}</p>
       </div>
 
-      <table className="w-full">
+      <table className="w-full text-[13px] sm:text-[13.5px]">
         <tbody>
           {f.lines.map((l) => (
             <tr key={l.label} className="border-b border-border/60 align-top">
-              <td className="py-2 pr-4 text-foreground">{l.label}</td>
+              <td className="py-2 pr-3 sm:pr-4 text-foreground break-words">{l.label}</td>
               <td className="py-2 text-right font-medium text-foreground whitespace-nowrap">{m(l.amount)}</td>
             </tr>
           ))}
@@ -65,7 +65,7 @@ export function FolioView({ reservationId }: { reservationId: string }) {
           <tr><td className="text-muted-foreground">GST Taxes ({DEMO_TAX_RATE * 100}%)</td><td className="text-right font-medium text-foreground">{m(f.tax)}</td></tr>
           <tr className="font-bold text-foreground"><td className="pt-2">Total Billed</td><td className="pt-2 text-right">{m(f.total)}</td></tr>
           <tr className="text-emerald-500 font-medium"><td>Payments Received</td><td className="text-right">− {m(f.paid)}</td></tr>
-          <tr className={cn("text-[15px] font-bold", f.balance > 0 ? "text-amber-500" : "text-emerald-500")}>
+          <tr className={cn("text-[14.5px] sm:text-[15px] font-bold", f.balance > 0 ? "text-amber-500" : "text-emerald-500")}>
             <td className="pt-2">Outstanding Balance</td>
             <td className="pt-2 text-right">{m(Math.max(0, f.balance))}</td>
           </tr>
@@ -86,10 +86,10 @@ export function ShiftRegister() {
   ];
 
   return (
-    <div className="card p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <h4 className="flex items-center gap-2 text-[14px] font-bold text-foreground">
-          <Wallet className="size-4 text-primary" /> Shift Register · Evening Handover
+    <div className="card min-w-0 overflow-hidden p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h4 className="flex items-center gap-2 text-[13.5px] sm:text-[14px] font-bold text-foreground">
+          <Wallet className="size-4 shrink-0 text-primary" /> Shift Register · Evening Handover
         </h4>
         <span className="chip bg-emerald-500/10 text-emerald-500 font-semibold">
           <CheckCircle2 className="size-3" /> Balanced

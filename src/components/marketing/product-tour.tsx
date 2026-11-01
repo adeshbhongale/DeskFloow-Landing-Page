@@ -65,8 +65,8 @@ export function ProductTour() {
   const isTarget = (k: Key) => !finished && current.key === k;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-      <div>
+    <div className="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[300px_1fr]">
+      <div className="min-w-0">
         <ol className="space-y-1.5">
           {steps.map((s, i) => (
             <li key={s.key}>
@@ -99,7 +99,7 @@ export function ProductTour() {
         </div>
       </div>
 
-      <div ref={box} className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-lift text-card-foreground">
+      <div ref={box} className="relative min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-lift text-card-foreground">
         <div className="mb-3 flex items-center justify-between">
           <p className="text-[13px] font-semibold text-foreground">Grand Palace · Front Desk</p>
           <span className="chip bg-primary/10 text-primary font-semibold">Workflow Preview</span>

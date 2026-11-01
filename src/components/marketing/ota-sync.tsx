@@ -66,8 +66,8 @@ export function OtaSync() {
   const StateIcon = stateIcon[selected.state];
 
   return (
-    <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_1fr]">
-      <div className="relative mx-auto w-full max-w-[460px]">
+    <div className="grid min-w-0 items-start gap-8 sm:gap-10 lg:grid-cols-[1.1fr_1fr]">
+      <div className="relative mx-auto w-full max-w-[310px] sm:max-w-[460px]">
         <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full" aria-hidden>
           <defs>
             <radialGradient id="hubglow">
@@ -98,11 +98,11 @@ export function OtaSync() {
         </svg>
 
         {/* hub */}
-        <div className="absolute top-1/2 left-1/2 grid size-[112px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-brand-800/80 text-center shadow-[0_0_60px_-10px_rgb(140_92_255/0.8)] backdrop-blur">
+        <div className="absolute top-1/2 left-1/2 grid size-[92px] sm:size-[112px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-brand-800/80 text-center shadow-[0_0_60px_-10px_rgb(140_92_255/0.8)] backdrop-blur">
           <div>
-            <RefreshCw className={cn("mx-auto size-5 text-gold-300", phase !== "idle" && "animate-spin")} />
-            <p className="mt-1 text-[12px] font-semibold text-white">DeskFloow</p>
-            <p className="text-[10px] text-white/60">{phase === "in" ? "Ingesting…" : phase === "out" ? "Propagating…" : "Inventory engine"}</p>
+            <RefreshCw className={cn("mx-auto size-4 sm:size-5 text-gold-300", phase !== "idle" && "animate-spin")} />
+            <p className="mt-1 text-[11px] sm:text-[12px] font-semibold text-white">DeskFloow</p>
+            <p className="text-[9.5px] sm:text-[10px] text-white/60">{phase === "in" ? "Ingesting…" : phase === "out" ? "Propagating…" : "Inventory engine"}</p>
           </div>
         </div>
 
@@ -118,24 +118,24 @@ export function OtaSync() {
               aria-label={`${c.name}: ${channelStateLabel[c.state]}`}
               style={{ left: `${(p.x / SIZE) * 100}%`, top: `${(p.y / SIZE) * 100}%` }}
               className={cn(
-                "absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 transition",
-                active ? "scale-110" : "opacity-80 hover:opacity-100",
+                "absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 sm:gap-1 transition",
+                active ? "scale-105 sm:scale-110" : "opacity-80 hover:opacity-100",
               )}
             >
               <span
-                className={cn("grid size-11 place-items-center rounded-2xl border text-[12px] font-bold text-white shadow-lg", active ? "border-gold-300 ring-4 ring-gold-400/25" : "border-white/20")}
+                className={cn("grid size-9 sm:size-11 place-items-center rounded-xl sm:rounded-2xl border text-[10.5px] sm:text-[12px] font-bold text-white shadow-lg", active ? "border-gold-300 ring-4 ring-gold-400/25" : "border-white/20")}
                 style={{ background: c.color }}
               >
                 {c.short}
               </span>
-              <span className="rounded-full bg-brand-950/70 px-2 py-0.5 text-[10.5px] whitespace-nowrap text-white/85">{c.name}</span>
+              <span className="rounded-full bg-brand-950/80 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10.5px] whitespace-nowrap text-white/85">{c.name}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="space-y-4">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur">
+      <div className="min-w-0 space-y-4">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 backdrop-blur">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-[12px] text-white/50">Selected channel</p>

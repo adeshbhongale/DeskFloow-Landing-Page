@@ -78,15 +78,16 @@ export function Testimonials() {
   const currentIdx = order[0];
 
   return (
-    <section className="overflow-hidden bg-muted/30 py-24 sm:py-32 relative" id="reviews">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-[1fr_1.25fr]">
+    <section className="overflow-hidden bg-muted/30 py-16 sm:py-32 relative" id="reviews">
+      <div className="container-x grid items-center gap-10 lg:gap-12 lg:grid-cols-[1fr_1.25fr]">
         <SectionHeading
+          className="min-w-0"
           eyebrow="Trusted by 250+ Hoteliers"
           title="Loved by hotel owners, general managers and front desks."
           lead="From boutique heritage properties to luxury resorts and serviced villas, see how hospitality teams transform operations with DeskFloow."
         >
           {/* Controls & Dots */}
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-4">
             <div className="flex gap-2">
               <button
                 type="button"
@@ -132,7 +133,7 @@ export function Testimonials() {
 
         {/* Shuffling Card Stack Container */}
         <div
-          className="relative h-[380px] sm:h-[350px] [perspective:1200px]"
+          className="relative min-w-0 h-[430px] min-[400px]:h-[395px] sm:h-[360px] [perspective:1200px]"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
@@ -146,10 +147,10 @@ export function Testimonials() {
                   initial={{ opacity: 0, y: 48, scale: 0.9, rotate: 4 }}
                   animate={{
                     opacity: 1 - depth * 0.2,
-                    y: depth * 20,
-                    x: depth * 6,
+                    y: depth * 16,
+                    x: depth * 2,
                     scale: 1 - depth * 0.045,
-                    rotate: depth === 0 ? 0 : depth % 2 ? 2.2 : -2.2,
+                    rotate: depth === 0 ? 0 : depth % 2 ? 1.6 : -1.6,
                     zIndex: 10 - depth,
                   }}
                   exit={{
@@ -167,53 +168,53 @@ export function Testimonials() {
                   }}
                   onClick={() => depth === 0 && rotate(1)}
                   className={cn(
-                    "absolute inset-x-0 top-0 cursor-pointer rounded-3xl border border-brand-200/80 bg-card p-7 sm:p-8 shadow-xl text-card-foreground backdrop-blur",
+                    "absolute inset-x-0 top-0 cursor-pointer rounded-3xl border border-brand-200/80 bg-card p-5 sm:p-8 shadow-xl text-card-foreground backdrop-blur",
                     depth === 0 && "ring-1 ring-brand-200/60 shadow-[0_22px_50px_-14px_rgb(53_19_125/0.22)]",
                     depth > 0 && "pointer-events-none select-none shadow-md",
                   )}
                   aria-hidden={depth > 0}
                 >
                   {/* Card Top: Stars rating & Verified Badge */}
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1" aria-label={`${r.rating} out of 5 stars`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-0.5 sm:gap-1" aria-label={`${r.rating} out of 5 stars`}>
                         {[...Array(r.rating)].map((_, starI) => (
-                          <Star key={starI} className="size-4.5 fill-amber-400 text-amber-400" />
+                          <Star key={starI} className="size-4 sm:size-4.5 fill-amber-400 text-amber-400" />
                         ))}
                       </div>
-                      <span className="text-[13px] font-bold text-foreground ml-1">5.0</span>
+                      <span className="text-[12.5px] sm:text-[13px] font-bold text-foreground ml-1">5.0</span>
                     </div>
 
-                    <span className="chip bg-emerald-500/10 text-emerald-600 font-semibold text-[11.5px]">
+                    <span className="chip bg-emerald-500/10 text-emerald-600 font-semibold text-[11px] sm:text-[11.5px]">
                       <CheckCircle2 className="size-3.5" /> Verified Hotelier
                     </span>
                   </div>
 
                   {/* Highlight */}
-                  <p className="mt-4 text-[14.5px] font-bold text-primary">
+                  <p className="mt-3.5 sm:mt-4 text-[14px] sm:text-[14.5px] font-bold text-primary">
                     “{r.highlight}”
                   </p>
 
                   {/* Main Quote */}
-                  <blockquote className="mt-2 text-[15.5px] leading-relaxed text-foreground/90 font-normal">
+                  <blockquote className="mt-2 text-[14px] sm:text-[15.5px] leading-relaxed text-foreground/90 font-normal">
                     {r.text}
                   </blockquote>
 
                   {/* Card Footer: Reviewer Info */}
-                  <figcaption className="mt-6 flex items-center justify-between border-t border-border/70 pt-4 text-[13px]">
-                    <div className="flex items-center gap-3">
-                      <span className="grid size-10 place-items-center rounded-full bg-primary/10 text-[14px] font-bold text-primary">
+                  <figcaption className="mt-5 sm:mt-6 flex items-center justify-between border-t border-border/70 pt-3.5 sm:pt-4 text-[12.5px] sm:text-[13px]">
+                    <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                      <span className="grid size-9 sm:size-10 shrink-0 place-items-center rounded-full bg-primary/10 text-[13px] sm:text-[14px] font-bold text-primary">
                         {r.name.split(" ").map((n) => n[0]).join("")}
                       </span>
-                      <div>
-                        <p className="font-bold text-foreground">{r.name}</p>
-                        <p className="text-[12px] text-muted-foreground">
+                      <div className="min-w-0">
+                        <p className="truncate font-bold text-foreground">{r.name}</p>
+                        <p className="truncate text-[11.5px] sm:text-[12px] text-muted-foreground">
                           {r.role} · {r.property}
                         </p>
                       </div>
                     </div>
 
-                    <span className="hidden sm:flex items-center gap-1 text-[11.5px] text-muted-foreground">
+                    <span className="hidden sm:flex shrink-0 items-center gap-1 text-[11.5px] text-muted-foreground">
                       <Building2 className="size-3.5 text-primary" /> {r.location}
                     </span>
                   </figcaption>

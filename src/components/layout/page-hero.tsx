@@ -20,9 +20,9 @@ export function PageHero({
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-brand-100 via-brand-50 to-brand-50" />
       <div className="grid-bg pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
       <div className="pointer-events-none absolute top-[-160px] left-1/2 -z-10 h-[380px] w-[760px] -translate-x-1/2 rounded-full bg-brand-400/20 blur-[110px]" />
-      <div className="container-x pt-10 pb-14 sm:pt-14 sm:pb-20">
+      <div className="container-x pt-7 pb-10 sm:pt-14 sm:pb-20">
         <nav aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-1 text-[13px] text-muted-foreground">
+          <ol className="flex flex-wrap items-center gap-1 text-[12.5px] sm:text-[13px] text-muted-foreground">
             <li><Link href="/" className="hover:text-ink">Home</Link></li>
             {crumbs.map((c) => (
               <li key={c.label} className="flex items-center gap-1">
@@ -32,11 +32,11 @@ export function PageHero({
             ))}
           </ol>
         </nav>
-        <div className="mt-8 max-w-3xl">
+        <div className="mt-5 sm:mt-8 max-w-3xl">
           {eyebrow && <p className="eyebrow [animation:wr_0.6s_ease_both]"><span className="size-1.5 rounded-full bg-gold-400" />{eyebrow}</p>}
-          <h1 className="mt-4 text-[40px] leading-[1.02] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-[58px] [animation:wr_0.8s_0.1s_cubic-bezier(0.22,1,0.36,1)_both]">{title}</h1>
-          {lead && <p className="lead mt-5 max-w-2xl [animation:wr_0.8s_0.25s_cubic-bezier(0.22,1,0.36,1)_both]">{lead}</p>}
-          {children && <div className="mt-8 [animation:wr_0.8s_0.4s_cubic-bezier(0.22,1,0.36,1)_both]">{children}</div>}
+          <h1 className="mt-3.5 sm:mt-4 text-[30px] leading-[1.08] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-[58px] [animation:wr_0.8s_0.1s_cubic-bezier(0.22,1,0.36,1)_both]">{title}</h1>
+          {lead && <p className="lead mt-4 sm:mt-5 max-w-2xl [animation:wr_0.8s_0.25s_cubic-bezier(0.22,1,0.36,1)_both]">{lead}</p>}
+          {children && <div className="mt-6 sm:mt-8 [animation:wr_0.8s_0.4s_cubic-bezier(0.22,1,0.36,1)_both]">{children}</div>}
         </div>
       </div>
     </section>

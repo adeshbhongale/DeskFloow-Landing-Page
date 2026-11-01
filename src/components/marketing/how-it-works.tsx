@@ -81,15 +81,15 @@ function Step({ i, onActive, active }: { i: number; onActive: (i: number) => voi
   }, [inView, i, onActive]);
   const s = steps[i];
   return (
-    <li ref={ref} className="relative pb-16 pl-14 last:pb-0 lg:min-h-[38vh]">
-      <span className={cn("absolute top-0 left-0 grid size-10 place-items-center rounded-xl border-2 bg-white transition", active ? "border-gold-400 text-gold-600 shadow-glow" : "border-brand-200 text-brand-500")}>
-        <s.icon className="size-4.5" />
+    <li ref={ref} className="relative pb-12 pl-12 sm:pb-16 sm:pl-14 last:pb-0 lg:min-h-[38vh]">
+      <span className={cn("absolute top-0 left-0 grid size-9 sm:size-10 place-items-center rounded-xl border-2 bg-white transition", active ? "border-gold-400 text-gold-600 shadow-glow" : "border-brand-200 text-brand-500")}>
+        <s.icon className="size-4 sm:size-4.5" />
       </span>
-      <p className="text-[12px] font-semibold tracking-widest text-muted-foreground uppercase">Step {i + 1}</p>
-      <h3 className={cn("mt-1 text-[22px] leading-tight font-semibold tracking-tight transition-colors", active ? "text-ink" : "text-ink/55")}>{s.title}</h3>
-      <p className="mt-2 max-w-md text-[15px] text-muted-foreground">{s.text}</p>
+      <p className="text-[11.5px] sm:text-[12px] font-semibold tracking-widest text-muted-foreground uppercase">Step {i + 1}</p>
+      <h3 className={cn("mt-1 text-[18.5px] sm:text-[22px] leading-tight font-semibold tracking-tight transition-colors", active ? "text-ink" : "text-ink/55")}>{s.title}</h3>
+      <p className="mt-2 max-w-md text-[14px] sm:text-[15px] text-muted-foreground">{s.text}</p>
       {/* On small screens the mini UI sits inline with its step */}
-      <div className="mt-5 lg:hidden"><Mini i={i} /></div>
+      <div className="mt-4 sm:mt-5 lg:hidden"><Mini i={i} /></div>
       {active && <Check className="sr-only" aria-label="Current step" />}
     </li>
   );
@@ -102,12 +102,12 @@ export function HowItWorks() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   return (
-    <section id="how-it-works" className="scroll-mt-20 bg-gradient-to-b from-brand-50 to-white py-24 sm:py-32">
+    <section id="how-it-works" className="scroll-mt-20 bg-gradient-to-b from-brand-50 to-white py-16 sm:py-32">
       <div className="container-x">
         <SectionHeading eyebrow="How DeskFloow works" title="Set up once. Run every day in flow." lead="Five steps from an empty account to a hotel where reservations, rooms and guests stay in sync." />
-        <div className="mt-16 grid gap-12 lg:grid-cols-2">
-          <ol ref={listRef} className="relative">
-            <div className="absolute top-2 bottom-2 left-[19px] w-[2px] bg-brand-100" aria-hidden>
+        <div className="mt-10 sm:mt-16 grid gap-12 lg:grid-cols-2">
+          <ol ref={listRef} className="relative min-w-0">
+            <div className="absolute top-2 bottom-2 left-[17px] sm:left-[19px] w-[2px] bg-brand-100" aria-hidden>
               <motion.div className="h-full w-full origin-top bg-gradient-to-b from-brand-500 to-gold-400" style={{ scaleY }} />
             </div>
             {steps.map((_, i) => <Step key={i} i={i} active={active === i} onActive={setActive} />)}

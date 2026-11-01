@@ -29,9 +29,9 @@ export function TapeChart() {
   const floors = [...new Set(visibleRooms.map((r) => r.floor))].sort();
 
   return (
-    <div className="card overflow-hidden">
+    <div className="card min-w-0 max-w-full overflow-hidden">
       {/* Tape Chart Top Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card/60 p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 border-b border-border bg-card/60 p-3">
         <div className="flex items-center gap-1.5">
           <button
             aria-label="Previous week"
@@ -42,7 +42,7 @@ export function TapeChart() {
           </button>
           <button
             onClick={() => setStart(shiftIso(DEMO_TODAY, -1))}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-[12.5px] font-medium hover:bg-accent"
+            className="flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-[12px] sm:text-[12.5px] font-medium hover:bg-accent"
           >
             <CalendarDays className="size-3.5 text-primary" /> Today
           </button>
@@ -53,20 +53,20 @@ export function TapeChart() {
           >
             <ChevronRight className="size-4" />
           </button>
-          <span className="ml-2 text-[13px] font-semibold">
+          <span className="ml-1.5 sm:ml-2 text-[12px] sm:text-[13px] font-semibold">
             {shortDate(start)} – {shortDate(shiftIso(end, -1))}
           </span>
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap gap-1" role="group" aria-label="Filter by room category">
+        <div className="flex max-w-full gap-1 overflow-x-auto no-scrollbar sm:flex-wrap" role="group" aria-label="Filter by room category">
           {categories.map((c) => (
             <button
               key={c}
               onClick={() => setCategory(c)}
               aria-pressed={category === c}
               className={cn(
-                "rounded-full px-3 py-1 text-[12px] font-medium transition",
+                "shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition",
                 category === c
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground",

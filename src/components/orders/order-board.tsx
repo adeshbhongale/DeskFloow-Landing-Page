@@ -28,9 +28,9 @@ export function OrderBoard() {
   const shown = orders.filter((o) => channel === "All" || o.channel === channel);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by order channel">
+    <div className="min-w-0 max-w-full space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+        <div className="flex max-w-full gap-1.5 overflow-x-auto no-scrollbar sm:flex-wrap" role="group" aria-label="Filter by order channel">
           {(["All", "Guest QR", "Room Service", "Restaurant POS", "Front Desk"] as const).map((c) => (
             <button
               key={c}
@@ -38,7 +38,7 @@ export function OrderBoard() {
               onClick={() => setChannel(c)}
               aria-pressed={channel === c}
               className={cn(
-                "rounded-full px-3 py-1 text-[12px] font-medium transition",
+                "shrink-0 rounded-full px-3 py-1 text-[12px] font-medium transition",
                 channel === c
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground",
@@ -53,7 +53,7 @@ export function OrderBoard() {
         </span>
       </div>
 
-      <div className="grid grid-flow-col auto-cols-[minmax(230px,1fr)] gap-3 overflow-x-auto pb-2 scrollbar-thin">
+      <div className="grid max-w-full grid-flow-col auto-cols-[minmax(220px,1fr)] gap-3 overflow-x-auto pb-2 scrollbar-thin">
         {orderFlow.map((s) => {
           const col = shown.filter((o) => o.status === s);
           return (

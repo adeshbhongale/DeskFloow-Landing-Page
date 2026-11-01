@@ -46,7 +46,7 @@ export function Pillar({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.7, ease: smoothEase }}
-      className={cn("scroll-mt-20 py-20 sm:py-28", className)}
+      className={cn("scroll-mt-20 overflow-hidden py-14 sm:py-28", className)}
     >
       <div className="container-x">
         <motion.div
@@ -54,9 +54,9 @@ export function Pillar({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: smoothEase }}
-          className="flex flex-wrap items-end justify-between gap-6"
+          className="flex flex-wrap items-end justify-between gap-4 sm:gap-6"
         >
-          <SectionHeading eyebrow={eyebrow} title={title} lead={lead} />
+          <SectionHeading eyebrow={eyebrow} title={title} lead={lead} className="min-w-0" />
           {aside ?? (
             <motion.span
               whileHover={{ scale: 1.04, y: -2 }}
@@ -72,7 +72,7 @@ export function Pillar({
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.08 }}
           transition={{ duration: 0.75, delay: 0.1, ease: smoothEase }}
-          className="mt-10"
+          className="mt-8 sm:mt-10 min-w-0 max-w-full"
         >
           {children}
         </motion.div>
@@ -89,7 +89,7 @@ export function FrontDeskPillar() {
       title="Your entire front desk. One clear picture."
       lead="Know what's happening across arrivals, departures, occupancy, cash, and room readiness without switching between disconnected tools."
     >
-      <div id="analytics" className="scroll-mt-24 rounded-[28px] border border-line bg-brand-50/50 p-3 sm:p-5">
+      <div id="analytics" className="scroll-mt-24 overflow-hidden rounded-[22px] sm:rounded-[28px] border border-line bg-brand-50/50 p-2.5 sm:p-5">
         <FrontDeskDashboard />
       </div>
     </Pillar>
@@ -337,8 +337,8 @@ export function FoliosPillar() {
       lead="Room nights, taxes, dining, laundry and spa charges automatically roll into itemized guest folios. The shift register calculates expected cash, card, and UPI balances at handover with clear variance tracking."
       className="bg-white"
     >
-      <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div className="card p-5"><FolioView reservationId="RSV-1039" /></div>
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[1.3fr_1fr]">
+        <div className="card min-w-0 overflow-hidden p-4 sm:p-5"><FolioView reservationId="RSV-1039" /></div>
         <ShiftRegister />
       </div>
     </Pillar>

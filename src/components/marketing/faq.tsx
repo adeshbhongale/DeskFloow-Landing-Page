@@ -104,9 +104,9 @@ export function Faq() {
                       aria-expanded={isOpen}
                       aria-controls={panelId}
                       onClick={() => setOpenIndex(isOpen ? null : idx)}
-                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 sm:px-7 sm:py-5.5"
+                      className="flex w-full items-center justify-between gap-3 px-4 py-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 sm:gap-4 sm:px-7 sm:py-5.5"
                     >
-                      <span className="flex items-center gap-3.5">
+                      <span className="flex items-center gap-2.5 sm:gap-3.5">
                         <span
                           className={cn(
                             "inline-flex size-6 shrink-0 items-center justify-center rounded-full text-[11.5px] font-bold transition-colors",
@@ -120,7 +120,7 @@ export function Faq() {
                         </span>
                         <span
                           className={cn(
-                            "text-[16px] font-semibold tracking-tight sm:text-[17px]",
+                            "text-[15px] font-semibold tracking-tight sm:text-[17px]",
                             isOpen ? "text-brand-800" : "text-ink",
                           )}
                         >
@@ -130,7 +130,7 @@ export function Faq() {
 
                       <span
                         className={cn(
-                          "grid size-8 shrink-0 place-items-center rounded-full border transition-all duration-200",
+                          "grid size-7 sm:size-8 shrink-0 place-items-center rounded-full border transition-all duration-200",
                           isOpen
                             ? "border-brand-600 bg-brand-600 text-white shadow-2xs"
                             : "border-brand-200 bg-white text-brand-700",
@@ -154,7 +154,7 @@ export function Faq() {
                         transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 pb-6 pl-[62px] text-[15px] leading-relaxed text-muted-foreground sm:px-7 sm:pb-6 sm:pl-[66px]">
+                        <div className="px-4 pb-4 pl-12 text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground sm:px-7 sm:pb-6 sm:pl-[66px]">
                           {item.answer}
                         </div>
                       </motion.div>

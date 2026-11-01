@@ -228,9 +228,9 @@ export function FloorPlan() {
   const cursorY = dragPhase === "source" ? coords.fromY : coords.toY;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[310px_1fr]">
+    <div className="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[310px_1fr]">
       {/* Left: Guided Drag-and-Drop Step Controls (same pattern as Guided Product Tour) */}
-      <div>
+      <div className="min-w-0">
         <ol className="space-y-1.5">
           {steps.map((s, i) => (
             <li key={s.key}>
@@ -324,19 +324,19 @@ export function FloorPlan() {
       {/* Right: Interactive Drag-and-Drop Floor Plan Canvas */}
       <div
         ref={boxRef}
-        className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-lift"
+        className="relative min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-3 sm:p-4 text-card-foreground shadow-lift"
       >
         {/* Top Bar */}
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <p className="text-[13.5px] font-bold text-foreground">
+          <div className="min-w-0">
+            <p className="text-[13px] sm:text-[13.5px] font-bold text-foreground">
               Grand Palace · Visual Floor Plan Builder &amp; Housekeeping
             </p>
             <p className="text-[11.5px] text-muted-foreground">
               Drag &amp; drop blocks to create rooms, assign guests, or update housekeeping status
             </p>
           </div>
-          <div className="flex items-center gap-3 text-[11.5px] text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-[11.5px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <span className="size-2 rounded-full bg-emerald-500" /> Clean
             </span>
@@ -354,7 +354,7 @@ export function FloorPlan() {
           <p className="mb-2 text-[11px] font-bold tracking-wider text-brand-700 uppercase">
             Drag &amp; Drop Builder Palette (or click to apply)
           </p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2 sm:grid-cols-4">
             <button
               type="button"
               draggable

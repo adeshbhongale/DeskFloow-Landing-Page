@@ -357,9 +357,9 @@ export function GuestCrm() {
   const cursorY = dragPhase === "source" ? coords.fromY : coords.toY;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[310px_1fr]">
+    <div className="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[310px_1fr]">
       {/* Left: Guided Drag-and-Drop Step Controls */}
-      <div>
+      <div className="min-w-0">
         <ol className="space-y-1.5">
           {steps.map((s, i) => (
             <li key={s.key}>
@@ -455,19 +455,19 @@ export function GuestCrm() {
       {/* Right: Interactive Guest Directory, Profile Viewer & Service Messaging Canvas */}
       <div
         ref={boxRef}
-        className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-lift"
+        className="relative min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-3.5 sm:p-5 text-card-foreground shadow-lift"
       >
         {/* Top Bar */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <p className="text-[13.5px] font-bold text-foreground">
+          <div className="min-w-0">
+            <p className="text-[13px] sm:text-[13.5px] font-bold text-foreground">
               Grand Palace · Guest Directory, Profile &amp; Service Messaging
             </p>
             <p className="text-[11.5px] text-muted-foreground">
               Add guests, view each guest&apos;s profile &amp; room details, and send instant service messages
             </p>
           </div>
-          <div className="flex items-center gap-3 text-[11.5px] text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-[11.5px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <span className="size-2 rounded-full bg-emerald-500" /> Checked-In
             </span>
@@ -481,11 +481,11 @@ export function GuestCrm() {
         </div>
 
         {/* Draggable Guest Actions Palette */}
-        <div className="mb-4 rounded-xl border border-brand-200/80 bg-brand-50/50 p-3">
+        <div className="mb-4 rounded-xl border border-brand-200/80 bg-brand-50/50 p-2.5 sm:p-3">
           <p className="mb-2 text-[11px] font-bold tracking-wider text-brand-700">
             Drag &amp; Drop Guest Actions Palette (or click to apply)
           </p>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2 sm:gap-2.5 sm:grid-cols-4">
             <button
               type="button"
               draggable
