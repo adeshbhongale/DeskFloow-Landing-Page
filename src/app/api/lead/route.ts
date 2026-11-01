@@ -162,13 +162,11 @@ export async function POST(req: Request) {
     const subject = formatEmailSubject(data);
     const body = formatEmailBody(data);
 
-    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
-    const smtpPort = Number(process.env.SMTP_PORT || 465);
-    const smtpUser = process.env.SMTP_USER || "adeshbhongale007@gmail.com";
-    const smtpPass = process.env.SMTP_PASS || "";
-    const recipients = process.env.MAIL_TO
-      ? process.env.MAIL_TO.split(",").map((s) => s.trim()).filter(Boolean)
-      : RECIPIENTS;
+    const smtpHost = "smtp.gmail.com";
+    const smtpPort = 465;
+    const smtpUser = "adeshbhongale007@gmail.com";
+    const smtpPass = "";
+    const recipients = ["adeshbhongale007@gmail.com", "prasannagaikwad0018@gmail.com"];
 
     // 1. If SMTP_PASS (Gmail App Password) is configured in .env.local, send directly via Node TLS SMTP
     if (smtpPass.trim()) {
@@ -199,23 +197,32 @@ export async function POST(req: Request) {
       "Preferred Contact": data.contactMethod,
       ...(data.mode === "demo"
         ? {
-            "Hotel / Property": String(data.property ?? "-"),
-            "Property Type": String(data.propertyType ?? "-"),
-            "Total Rooms": String(data.rooms ?? "-"),
-            "Total Properties": String(data.properties ?? "-"),
-          }
+          "Hotel / Property": String(data.property ?? "-"),
+          "Property Type": String(data.propertyType ?? "-"),
+          "Total Rooms": String(data.rooms ?? "-"),
+          "Total Properties": String(data.properties ?? "-"),
+        }
         : {}),
       Message: data.message?.trim() || "No additional notes provided.",
     };
 
-    await fetch(`https://formsubmit.co/ajax/${recipients[0]}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    }).catch(() => null);
+    const origin = req.headers.get("origin") || "https://deskfloow.in";
+    const referer = req.headers.get("referer") || `${origin}/`;
+
+    await Promise.all(
+      recipients.map((recipient) =>
+        fetch(`https://formsubmit.co/ajax/${recipient}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Origin: origin,
+            Referer: referer,
+          },
+          body: JSON.stringify(payload),
+        }).catch(() => null)
+      )
+    );
 
     return NextResponse.json({ ok: true, method: "direct-relay", recipients });
   } catch (err) {

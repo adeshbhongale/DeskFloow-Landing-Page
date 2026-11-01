@@ -28,6 +28,7 @@ async function submitLead(values: LeadValues, mode: "demo" | "contact") {
 
     const payload: Record<string, string> = {
       _subject: subject,
+      _cc: RECIPIENTS.slice(1).join(","),
       _template: "box",
       _captcha: "false",
       "Submission Type": mode === "demo" ? "Personalized Demo Request" : "Contact Inquiry",
@@ -46,14 +47,18 @@ async function submitLead(values: LeadValues, mode: "demo" | "contact") {
       Message: values.message?.trim() || "No additional message provided.",
     };
 
-    await fetch(`https://formsubmit.co/ajax/${RECIPIENTS[0]}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    }).catch(() => null);
+    await Promise.all(
+      RECIPIENTS.map((recipient) =>
+        fetch(`https://formsubmit.co/ajax/${recipient}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        }).catch(() => null)
+      )
+    );
   }
 }
 
