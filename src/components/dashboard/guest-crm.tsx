@@ -1,59 +1,62 @@
 "use client";
 
-import { AnimatePresence, motion, useInView } from "motion/react";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { cn, inr } from "@/lib/utils";
 import {
+  BedDouble,
+  BellRing,
+  CheckCheck,
   ChevronLeft,
   ChevronRight,
+  FileCheck2,
+  GripVertical,
+  MousePointer2,
   Pause,
+  Phone,
   Play,
   RotateCcw,
-  MousePointer2,
-  GripVertical,
-  UserPlus,
+  Send,
   ShieldCheck,
-  Crown,
-  HeartHandshake,
-  FileCheck2,
+  UserPlus,
   UserRound,
 } from "lucide-react";
-import { cn, inr } from "@/lib/utils";
+import { AnimatePresence, motion, useInView } from "motion/react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const steps = [
   {
-    key: "create",
-    title: "Drag & drop to create Guest Profile",
-    text: "Drag the new guest block for Meera Joshi from the builder palette onto the empty CRM slot.",
-    ghostLabel: "+ Guest · Meera Joshi",
+    key: "add",
+    title: "Drag & drop to add new guest",
+    text: "Drag the new guest card for Meera Joshi from the palette into the Guest Directory.",
+    ghostLabel: "+ Add Guest · Meera Joshi",
   },
   {
     key: "kyc",
-    title: "Drop verified KYC onto Meera Joshi",
-    text: "Drag Aadhaar & Passport DigiLocker KYC onto Meera's card to verify her identity.",
-    ghostLabel: "✓ Aadhaar & Passport KYC",
+    title: "Attach guest ID & room details",
+    text: "Drop Aadhaar ID verification and Room 203 stay details onto Meera Joshi's profile.",
+    ghostLabel: "✓ ID Verified · Room 203",
   },
   {
-    key: "tier",
-    title: "Drop Platinum VIP loyalty tier",
-    text: "Drag the Platinum VIP badge onto Meera's profile to unlock 3x points & suite upgrades.",
-    ghostLabel: "★ Platinum VIP Tier",
+    key: "service",
+    title: "Add guest service request",
+    text: "Drop 'Airport Pickup & Breakfast' onto Meera's profile to log her service needs.",
+    ghostLabel: "+ Airport Pickup & Breakfast",
   },
   {
-    key: "prefs",
-    title: "Drop dietary & occasion preferences",
-    text: "Attach Jain Diet, Memory Pillow & Anniversary setup alerts to sync with Kitchen POS.",
-    ghostLabel: "♥ Jain Diet & Anniversary",
+    key: "message",
+    title: "Send service message to guest",
+    text: "Drop 'Send Service Message' onto Meera's card to send room & service updates to her phone.",
+    ghostLabel: "✉ Send Service Message",
   },
   {
-    key: "inspect",
-    title: "Inspect 360° guest info & folio spend",
-    text: "Click Meera Joshi's card to inspect her KYC vault, stay history, and lifetime spend.",
-    ghostLabel: "Inspect 360° Guest Info",
+    key: "profile",
+    title: "View full guest profile & message log",
+    text: "Click any guest card to view their complete profile, stay details, and sent messages.",
+    ghostLabel: "View Guest Profile",
   },
 ] as const;
 
 type StepKey = (typeof steps)[number]["key"];
-type VipTier = "Member" | "Silver" | "Gold" | "Platinum VIP";
+type StayStatus = "Checked-In" | "Arriving Today" | "In-House";
 
 interface GuestProfileItem {
   id: string;
@@ -61,17 +64,25 @@ interface GuestProfileItem {
   name: string;
   city: string;
   phone: string;
-  tier: VipTier;
-  points: number;
-  stays: number;
-  lifetimeSpend: number;
-  kycVerified: boolean;
-  kycDoc: string;
-  companion: string;
-  lastRoom: string;
-  primaryNote: string;
-  preferences: string[];
+  email: string;
+  room: string;
+  stayDates: string;
+  status: StayStatus;
+  folioAmount: number;
+  idVerified: boolean;
+  idDoc: string;
+  serviceSummary: string;
+  services: string[];
+  messageSent: boolean;
+  lastMessage: string;
 }
+
+const SERVICE_MESSAGE_TEMPLATES = [
+  "Room 203 is ready! Wi-Fi: GrandPalace_Guest (Pass: Stay2026) & breakfast 7–10:30 AM.",
+  "Your airport pickup cab (RJ-14-TB-4092) is scheduled and confirmed for 1:30 PM.",
+  "Your in-room dining & housekeeping request has been assigned to our staff.",
+  "Thank you for staying with us! Your digital folio invoice has been shared.",
+];
 
 const BASE_GUESTS: GuestProfileItem[] = [
   {
@@ -80,16 +91,17 @@ const BASE_GUESTS: GuestProfileItem[] = [
     name: "Aarav Mehta",
     city: "Mumbai",
     phone: "+91 98201 44110",
-    tier: "Gold",
-    points: 8420,
-    stays: 4,
-    lifetimeSpend: 68400,
-    kycVerified: true,
-    kycDoc: "Aadhaar ···· 7392 (Verified)",
-    companion: "Neha Mehta · Spouse",
-    lastRoom: "Room 101 · Standard",
-    primaryNote: "High Floor · Early Check-In",
-    preferences: ["High Floor", "Early Check-In", "Black Coffee"],
+    email: "aarav.mehta@finserve.in",
+    room: "Room 101 · Standard",
+    stayDates: "11 Nov – 14 Nov",
+    status: "Checked-In",
+    folioAmount: 15200,
+    idVerified: true,
+    idDoc: "Aadhaar ···· 7392 (Verified)",
+    serviceSummary: "Wi-Fi & Breakfast Sent",
+    services: ["Complimentary Breakfast", "Early Check-In", "Morning Newspaper"],
+    messageSent: true,
+    lastMessage: "Welcome Aarav! Room 101 Wi-Fi & breakfast timings have been sent to your phone.",
   },
   {
     id: "g-ananya",
@@ -97,16 +109,17 @@ const BASE_GUESTS: GuestProfileItem[] = [
     name: "Ananya Iyer",
     city: "Bengaluru",
     phone: "+91 98840 12093",
-    tier: "Platinum VIP",
-    points: 12950,
-    stays: 5,
-    lifetimeSpend: 118600,
-    kycVerified: true,
-    kycDoc: "Passport #K9042118 (Verified)",
-    companion: "Solo Corporate Guest",
-    lastRoom: "Room 201 · Premium",
-    primaryNote: "Quiet Wing · Airport Sedan",
-    preferences: ["Quiet Wing", "Hypoallergenic Pillow", "Airport Sedan"],
+    email: "ananya@studioiyer.com",
+    room: "Room 201 · Premium",
+    stayDates: "10 Nov – 13 Nov",
+    status: "Checked-In",
+    folioAmount: 27600,
+    idVerified: true,
+    idDoc: "Passport #K9042118 (Verified)",
+    serviceSummary: "Airport Drop & Laundry",
+    services: ["Airport Drop 4:00 PM", "Express Laundry", "Quiet Wing Room"],
+    messageSent: true,
+    lastMessage: "Hi Ananya, your express laundry order is complete and delivered to Room 201.",
   },
   {
     id: "g-vikram",
@@ -114,16 +127,17 @@ const BASE_GUESTS: GuestProfileItem[] = [
     name: "Vikram Singh",
     city: "Udaipur",
     phone: "+91 98112 77804",
-    tier: "Gold",
-    points: 6890,
-    stays: 3,
-    lifetimeSpend: 54000,
-    kycVerified: true,
-    kycDoc: "Aadhaar ···· 5510 (Verified)",
-    companion: "Family (2 Adults, 1 Child)",
-    lastRoom: "Room 104 · Deluxe",
-    primaryNote: "King Bed · Extra Rollaway",
-    preferences: ["King Bed", "Extra Rollaway", "Late Checkout"],
+    email: "vikram.singh@mewar.co",
+    room: "Room 104 · Deluxe",
+    stayDates: "12 Nov – 15 Nov",
+    status: "Checked-In",
+    folioAmount: 20800,
+    idVerified: true,
+    idDoc: "Aadhaar ···· 5510 (Verified)",
+    serviceSummary: "Extra Bedding & Room Dining",
+    services: ["Extra Rollaway Bed", "Room Dining Order #402", "Late Check-Out"],
+    messageSent: true,
+    lastMessage: "Hi Vikram, your extra bedding and dinner tray are on the way to Room 104.",
   },
   {
     id: "g-kabir",
@@ -131,16 +145,17 @@ const BASE_GUESTS: GuestProfileItem[] = [
     name: "Kabir Sharma",
     city: "New Delhi",
     phone: "+91 90080 33218",
-    tier: "Silver",
-    points: 4100,
-    stays: 2,
-    lifetimeSpend: 31200,
-    kycVerified: true,
-    kycDoc: "Aadhaar ···· 2190 (Verified)",
-    companion: "Rhea Sharma · Spouse",
-    lastRoom: "Room 204 · Deluxe",
-    primaryNote: "Pool View · Late Check-Out",
-    preferences: ["Pool View", "Late Check-Out 1 PM", "Extra Towels"],
+    email: "kabir.sharma@cloudnine.io",
+    room: "Room 204 · Deluxe",
+    stayDates: "12 Nov – 15 Nov",
+    status: "In-House",
+    folioAmount: 15600,
+    idVerified: true,
+    idDoc: "Aadhaar ···· 2190 (Verified)",
+    serviceSummary: "Digital Key & Pool Towels",
+    services: ["Digital Key Shared", "Extra Pool Towels", "2 PM Check-Out"],
+    messageSent: true,
+    lastMessage: "Hi Kabir, your Room 204 digital key and pool access pass are active.",
   },
   {
     id: "g-james",
@@ -148,35 +163,32 @@ const BASE_GUESTS: GuestProfileItem[] = [
     name: "James Carter",
     city: "London",
     phone: "+44 7700 900412",
-    tier: "Silver",
-    points: 3650,
-    stays: 2,
-    lifetimeSpend: 42800,
-    kycVerified: true,
-    kycDoc: "UK Passport #P449102",
-    companion: "Emily Carter · Spouse",
-    lastRoom: "Room 202 · Premium",
-    primaryNote: "Vegan Breakfast · Heritage Tour",
-    preferences: ["Vegan Breakfast", "Airport Transfer", "Quiet Room"],
+    email: "j.carter@ukmail.co.uk",
+    room: "Room 202 · Premium",
+    stayDates: "12 Nov – 16 Nov",
+    status: "In-House",
+    folioAmount: 27600,
+    idVerified: true,
+    idDoc: "UK Passport #P449102",
+    serviceSummary: "City Tour Cab & Breakfast",
+    services: ["City Guide Cab 10 AM", "Continental Breakfast", "Adapter Plug"],
+    messageSent: true,
+    lastMessage: "Hi James, your sightseeing cab will be waiting at the main porch at 10:00 AM.",
   },
 ];
 
-const TIER_META: Record<VipTier, { badge: string; dot: string }> = {
-  "Platinum VIP": {
-    badge: "bg-brand-900 text-gold-300 border-gold-400/50",
-    dot: "bg-brand-700",
-  },
-  Gold: {
-    badge: "bg-amber-100 text-amber-900 border-amber-300",
-    dot: "bg-amber-500",
-  },
-  Silver: {
-    badge: "bg-slate-100 text-slate-800 border-slate-300",
-    dot: "bg-slate-400",
-  },
-  Member: {
-    badge: "bg-brand-50 text-brand-700 border-brand-200",
+const STATUS_META: Record<StayStatus, { badge: string; dot: string }> = {
+  "Checked-In": {
+    badge: "bg-emerald-50 text-emerald-800 border-emerald-200",
     dot: "bg-emerald-500",
+  },
+  "In-House": {
+    badge: "bg-brand-50 text-brand-800 border-brand-200",
+    dot: "bg-brand-600",
+  },
+  "Arriving Today": {
+    badge: "bg-amber-50 text-amber-800 border-amber-200",
+    dot: "bg-amber-500",
   },
 };
 
@@ -191,8 +203,8 @@ export function GuestCrm() {
     toY: 220,
   });
   const [clickKey, setClickKey] = useState(0);
-  const [selectedGuestId, setSelectedGuestId] = useState("g-ananya");
-  const [manualTierOverrides, setManualTierOverrides] = useState<Record<string, VipTier>>({});
+  const [selectedGuestId, setSelectedGuestId] = useState("g-aarav");
+  const [customMessages, setCustomMessages] = useState<Record<string, { text: string; idx: number }>>({});
 
   const boxRef = useRef<HTMLDivElement>(null);
   const inView = useInView(boxRef, { amount: 0.15 });
@@ -200,10 +212,10 @@ export function GuestCrm() {
   const finished = done >= steps.length;
   const current = steps[Math.min(done, steps.length - 1)];
 
-  const guestCreated = done >= 1;
-  const kycVerified = done >= 2;
-  const vipUpgraded = done >= 3;
-  const prefsAdded = done >= 4;
+  const guestAdded = done >= 1;
+  const kycAttached = done >= 2;
+  const serviceAdded = done >= 3;
+  const messageSentStep = done >= 4;
 
   const meeraProfile: GuestProfileItem = {
     id: "g-meera",
@@ -211,35 +223,40 @@ export function GuestCrm() {
     name: "Meera Joshi",
     city: "Jaipur",
     phone: "+91 98230 55401",
-    tier: manualTierOverrides["g-meera"] ?? (vipUpgraded ? "Platinum VIP" : "Member"),
-    points: vipUpgraded ? 14820 : 1200,
-    stays: vipUpgraded ? 6 : 1,
-    lifetimeSpend: vipUpgraded ? 142500 : 23000,
-    kycVerified,
-    kycDoc: kycVerified ? "Aadhaar ···· 4821 & Passport ✓" : "KYC Pending Upload",
-    companion: prefsAdded ? "Rohan Joshi · Anniversary 12 Nov" : "Rohan Joshi · Spouse",
-    lastRoom: "Suite 203 · Royal Suite",
-    primaryNote: prefsAdded
-      ? "Jain Diet · Memory Pillow · Anniv."
-      : kycVerified
-        ? "KYC Verified ✓ · Suite 203"
-        : "New Profile · Suite 203",
-    preferences: prefsAdded
-      ? ["Jain Vegetarian", "Memory Foam Pillow", "21°C AC", "Anniversary Setup"]
-      : ["Direct Booking", "Suite 203"],
+    email: "meera.joshi@heritagecraft.in",
+    room: kycAttached ? "Room 203 · Suite" : "Room 203 (Assigning)",
+    stayDates: "12 Nov – 14 Nov",
+    status: kycAttached ? "Checked-In" : "Arriving Today",
+    folioAmount: 23000,
+    idVerified: kycAttached,
+    idDoc: kycAttached ? "Aadhaar ···· 4821 (Verified ✓)" : "ID Proof Pending",
+    serviceSummary: messageSentStep
+      ? "Service Msg Sent ✓ · Room 203"
+      : serviceAdded
+        ? "Airport Pickup · Breakfast"
+        : "New Guest Profile Added",
+    services: serviceAdded
+      ? ["Airport Pickup 1:30 PM", "Complimentary Breakfast", "Fresh Fruit Basket"]
+      : ["Room 203 Reservation"],
+    messageSent: messageSentStep || Boolean(customMessages["g-meera"]),
+    lastMessage:
+      customMessages["g-meera"]?.text ??
+      (messageSentStep
+        ? "Hi Meera! Room 203 check-in, Wi-Fi details & your 1:30 PM airport pickup are confirmed."
+        : "Ready to send welcome & room service details to +91 98230 55401."),
   };
 
   const computedGuests: GuestProfileItem[] = [
     ...BASE_GUESTS.map((g) => ({
       ...g,
-      tier: manualTierOverrides[g.id] ?? g.tier,
+      lastMessage: customMessages[g.id]?.text ?? g.lastMessage,
     })),
-    ...(guestCreated ? [meeraProfile] : []),
+    ...(guestAdded ? [meeraProfile] : []),
   ];
 
-  const activeGuestId = guestCreated ? "g-meera" : selectedGuestId;
+  const activeGuestId = guestAdded ? "g-meera" : selectedGuestId;
   const selectedGuest =
-    computedGuests.find((g) => g.id === (guestCreated && selectedGuestId === "g-ananya" ? "g-meera" : selectedGuestId)) ??
+    computedGuests.find((g) => g.id === (guestAdded && selectedGuestId === "g-aarav" ? "g-meera" : selectedGuestId)) ??
     computedGuests.find((g) => g.id === activeGuestId) ??
     computedGuests[0];
 
@@ -282,9 +299,9 @@ export function GuestCrm() {
     if (!playing || !inView) return;
     if (finished) {
       const tRestart = setTimeout(() => {
-        setSelectedGuestId("g-ananya");
+        setSelectedGuestId("g-aarav");
         setDone(0);
-      }, 3200);
+      }, 3400);
       return () => clearTimeout(tRestart);
     }
 
@@ -319,11 +336,20 @@ export function GuestCrm() {
     }
   };
 
-  const cycleGuestTier = (guestId: string, currentTier: VipTier) => {
-    const order: VipTier[] = ["Member", "Silver", "Gold", "Platinum VIP"];
-    const next = order[(order.indexOf(currentTier) + 1) % order.length];
-    setManualTierOverrides((prev) => ({ ...prev, [guestId]: next }));
-    setSelectedGuestId(guestId);
+  const sendServiceMessageToGuest = (guest: GuestProfileItem) => {
+    const prevIdx = customMessages[guest.id]?.idx ?? -1;
+    const nextIdx = (prevIdx + 1) % SERVICE_MESSAGE_TEMPLATES.length;
+    setCustomMessages((prev) => ({
+      ...prev,
+      [guest.id]: {
+        idx: nextIdx,
+        text: `Hi ${guest.name.split(" ")[0]}! ${SERVICE_MESSAGE_TEMPLATES[nextIdx]}`,
+      },
+    }));
+    setSelectedGuestId(guest.id);
+    if (guest.id === "g-meera" && done < 4) {
+      setDone(4);
+    }
   };
 
   const isTarget = (k: StepKey) => !finished && current.key === k;
@@ -332,7 +358,7 @@ export function GuestCrm() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[310px_1fr]">
-      {/* Left: Guided Drag-and-Drop Step Controls (exact match with Visual Floor Plan) */}
+      {/* Left: Guided Drag-and-Drop Step Controls */}
       <div>
         <ol className="space-y-1.5">
           {steps.map((s, i) => (
@@ -414,8 +440,8 @@ export function GuestCrm() {
           <button
             type="button"
             onClick={() => {
-              setManualTierOverrides({});
-              setSelectedGuestId("g-ananya");
+              setCustomMessages({});
+              setSelectedGuestId("g-aarav");
               setDone(0);
               setPlaying(true);
             }}
@@ -426,7 +452,7 @@ export function GuestCrm() {
         </div>
       </div>
 
-      {/* Right: Interactive Drag-and-Drop Guest CRM Canvas (exact layout match with FloorPlan) */}
+      {/* Right: Interactive Guest Directory, Profile Viewer & Service Messaging Canvas */}
       <div
         ref={boxRef}
         className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-lift"
@@ -435,48 +461,48 @@ export function GuestCrm() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <div>
             <p className="text-[13.5px] font-bold text-foreground">
-              Grand Palace · 360° Guest CRM &amp; Loyalty Directory
+              Grand Palace · Guest Directory, Profile &amp; Service Messaging
             </p>
             <p className="text-[11.5px] text-muted-foreground">
-              Drag &amp; drop blocks to create guests, verify KYC, upgrade VIP tiers, or inspect guest info
+              Add guests, view each guest&apos;s profile &amp; room details, and send instant service messages
             </p>
           </div>
           <div className="flex items-center gap-3 text-[11.5px] text-muted-foreground">
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-brand-700" /> Platinum VIP
+              <span className="size-2 rounded-full bg-emerald-500" /> Checked-In
             </span>
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-amber-500" /> Gold Tier
+              <span className="size-2 rounded-full bg-brand-600" /> In-House
             </span>
             <span className="flex items-center gap-1">
-              <span className="size-2 rounded-full bg-emerald-500" /> KYC Verified
+              <span className="size-2 rounded-full bg-sky-500" /> Message Sent
             </span>
           </div>
         </div>
 
-        {/* Draggable Guest CRM Builder Palette */}
+        {/* Draggable Guest Actions Palette */}
         <div className="mb-4 rounded-xl border border-brand-200/80 bg-brand-50/50 p-3">
-          <p className="mb-2 text-[11px] font-bold tracking-wider text-brand-700 uppercase">
-            Drag &amp; Drop Guest CRM Palette (or click to apply)
+          <p className="mb-2 text-[11px] font-bold tracking-wider text-brand-700">
+            Drag &amp; Drop Guest Actions Palette (or click to apply)
           </p>
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             <button
               type="button"
               draggable
-              onDragStart={(e) => e.dataTransfer.setData("text/plain", "create")}
-              data-crm-source="create"
-              onClick={() => act("create")}
+              onDragStart={(e) => e.dataTransfer.setData("text/plain", "add")}
+              data-crm-source="add"
+              onClick={() => act("add")}
               className={cn(
                 "flex items-center gap-2 rounded-xl border bg-white px-3 py-2.5 text-left text-[12px] font-semibold shadow-2xs transition",
-                guestCreated
+                guestAdded
                   ? "border-emerald-300 bg-emerald-50/60 text-emerald-800"
                   : "border-brand-200 text-ink hover:border-brand-400",
-                isTarget("create") && "ring-2 ring-gold-400",
+                isTarget("add") && "ring-2 ring-gold-400",
               )}
             >
               <GripVertical className="size-3.5 shrink-0 text-muted-foreground" />
               <UserPlus className="size-4 shrink-0 text-brand-600" />
-              <span className="truncate">{guestCreated ? "Meera Created ✓" : "+ Guest: Meera Joshi"}</span>
+              <span className="truncate">{guestAdded ? "Guest Added ✓" : "+ Add: Meera Joshi"}</span>
             </button>
 
             <button
@@ -487,7 +513,7 @@ export function GuestCrm() {
               onClick={() => act("kyc")}
               className={cn(
                 "flex items-center gap-2 rounded-xl border bg-white px-3 py-2.5 text-left text-[12px] font-semibold shadow-2xs transition",
-                kycVerified
+                kycAttached
                   ? "border-emerald-300 bg-emerald-50/60 text-emerald-800"
                   : "border-brand-200 text-ink hover:border-brand-400",
                 isTarget("kyc") && "ring-2 ring-gold-400",
@@ -495,79 +521,79 @@ export function GuestCrm() {
             >
               <GripVertical className="size-3.5 shrink-0 text-muted-foreground" />
               <FileCheck2 className="size-4 shrink-0 text-emerald-600" />
-              <span className="truncate">{kycVerified ? "KYC Verified ✓" : "KYC: Aadhaar & ID"}</span>
+              <span className="truncate">{kycAttached ? "ID & Room Saved ✓" : "ID & Room 203"}</span>
             </button>
 
             <button
               type="button"
               draggable
-              onDragStart={(e) => e.dataTransfer.setData("text/plain", "tier")}
-              data-crm-source="tier"
-              onClick={() => act("tier")}
+              onDragStart={(e) => e.dataTransfer.setData("text/plain", "service")}
+              data-crm-source="service"
+              onClick={() => act("service")}
               className={cn(
                 "flex items-center gap-2 rounded-xl border bg-white px-3 py-2.5 text-left text-[12px] font-semibold shadow-2xs transition",
-                vipUpgraded
+                serviceAdded
                   ? "border-emerald-300 bg-emerald-50/60 text-emerald-800"
                   : "border-brand-200 text-ink hover:border-brand-400",
-                isTarget("tier") && "ring-2 ring-gold-400",
+                isTarget("service") && "ring-2 ring-gold-400",
               )}
             >
               <GripVertical className="size-3.5 shrink-0 text-muted-foreground" />
-              <Crown className="size-4 shrink-0 text-amber-600" />
-              <span className="truncate">{vipUpgraded ? "Platinum VIP ✓" : "Tier: Platinum VIP"}</span>
+              <BellRing className="size-4 shrink-0 text-amber-600" />
+              <span className="truncate">{serviceAdded ? "Service Logged ✓" : "Service: Pickup & Meal"}</span>
             </button>
 
             <button
               type="button"
               draggable
-              onDragStart={(e) => e.dataTransfer.setData("text/plain", "prefs")}
-              data-crm-source="prefs"
-              onClick={() => act("prefs")}
+              onDragStart={(e) => e.dataTransfer.setData("text/plain", "message")}
+              data-crm-source="message"
+              onClick={() => act("message")}
               className={cn(
                 "flex items-center gap-2 rounded-xl border bg-white px-3 py-2.5 text-left text-[12px] font-semibold shadow-2xs transition",
-                prefsAdded
+                messageSentStep
                   ? "border-emerald-300 bg-emerald-50/60 text-emerald-800"
                   : "border-brand-200 text-ink hover:border-brand-400",
-                isTarget("prefs") && "ring-2 ring-gold-400",
+                isTarget("message") && "ring-2 ring-gold-400",
               )}
             >
               <GripVertical className="size-3.5 shrink-0 text-muted-foreground" />
-              <HeartHandshake className="size-4 shrink-0 text-rose-600" />
-              <span className="truncate">{prefsAdded ? "Prefs Saved ✓" : "Prefs: Jain & Anniv."}</span>
+              <Send className="size-4 shrink-0 text-sky-600" />
+              <span className="truncate">{messageSentStep ? "Message Sent ✓" : "Send Service Message"}</span>
             </button>
           </div>
         </div>
 
-        {/* Main Grid + Selected Guest Inspector (same structure & spacing as FloorPlan) */}
-        <div className="grid gap-4 xl:grid-cols-[1fr_255px]">
+        {/* Main Guest Cards Grid + Right Selected Guest Profile & Messaging Panel */}
+        <div className="grid gap-4 xl:grid-cols-[1fr_265px]">
           <div className="space-y-3.5">
             {([1, 2] as const).map((grp) => {
               const grpGuests = computedGuests.filter((g) => g.group === grp);
               return (
                 <div key={grp} className="rounded-xl border border-border/70 bg-muted/20 p-3.5">
                   <div className="mb-2.5 flex items-center justify-between">
-                    <span className="text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
-                      {grp === 1 ? "Returning VIP & Loyalty Members" : "In-House & New Guest Profiles"}
+                    <span className="text-[11px] font-bold tracking-wider text-muted-foreground">
+                      {grp === 1 ? "Floor 1 · Checked-In Guests" : "Floor 2 · In-House & New Guests"}
                     </span>
                     <span className="text-[11px] text-muted-foreground">
-                      {grpGuests.filter((x) => x.kycVerified).length}/{grpGuests.length} KYC Verified
+                      {grpGuests.filter((x) => x.messageSent).length}/{grpGuests.length} Service Messages Sent
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     {grpGuests.map((g) => {
-                      const m = TIER_META[g.tier];
+                      const m = STATUS_META[g.status];
                       const isSel = g.id === selectedGuest?.id;
                       const isMeera = g.id === "g-meera";
                       const targetAttr = isMeera
                         ? current.key === "kyc"
                           ? "kyc"
-                          : current.key === "tier"
-                            ? "tier"
-                            : current.key === "prefs"
-                              ? "prefs"
-                              : current.key === "inspect"
-                                ? "inspect"
+                          : current.key === "service"
+                            ? "service"
+                            : current.key === "message"
+                              ? "message"
+                              : current.key === "profile"
+                                ? "profile"
                                 : undefined
                         : undefined;
 
@@ -584,8 +610,8 @@ export function GuestCrm() {
                             if (key) act(key);
                           }}
                           onClick={() => {
-                            if (isMeera && isTarget("inspect")) {
-                              act("inspect");
+                            if (isMeera && isTarget("profile")) {
+                              act("profile");
                             } else {
                               setSelectedGuestId(g.id);
                             }
@@ -593,7 +619,7 @@ export function GuestCrm() {
                           initial={{ opacity: 0, scale: 0.92 }}
                           animate={{ opacity: 1, scale: 1 }}
                           className={cn(
-                            "group relative flex min-h-[104px] flex-col justify-between rounded-xl border p-3.5 text-left transition",
+                            "group relative flex min-h-[108px] flex-col justify-between rounded-xl border p-3.5 text-left transition",
                             isSel
                               ? "border-primary bg-card shadow-md ring-2 ring-primary/35"
                               : "border-border/80 bg-card/90 hover:border-primary/50",
@@ -606,7 +632,7 @@ export function GuestCrm() {
                                 {g.name}
                               </span>
                               <span className="block truncate text-[11px] text-muted-foreground">
-                                {g.city} · {g.stays} {g.stays === 1 ? "Stay" : "Stays"}
+                                {g.room}
                               </span>
                             </div>
                             <span className={cn("mt-1 size-2.5 shrink-0 rounded-full", m.dot)} />
@@ -615,57 +641,57 @@ export function GuestCrm() {
                           <div className="my-2 flex flex-wrap items-center gap-1.5">
                             <span
                               className={cn(
-                                "rounded-full border px-2.5 py-0.5 text-[10.5px] font-bold",
+                                "rounded-full border px-2.5 py-0.5 text-[10px] font-bold",
                                 m.badge,
                               )}
                             >
-                              {g.tier}
+                              {g.status}
                             </span>
                             <span
                               className={cn(
                                 "rounded-full px-2 py-0.5 text-[10px] font-semibold",
-                                g.kycVerified
-                                  ? "bg-emerald-50 text-emerald-700"
+                                g.messageSent
+                                  ? "bg-sky-50 text-sky-700"
                                   : "bg-amber-50 text-amber-700",
                               )}
                             >
-                              {g.kycVerified ? "KYC ✓" : "KYC Pending"}
+                              {g.messageSent ? "Msg Sent ✓" : "ID Pending"}
                             </span>
                           </div>
 
                           <div className="flex items-center justify-between gap-2 text-[11px]">
                             <span className="truncate font-medium text-primary">
-                              {g.primaryNote}
+                              {g.serviceSummary}
                             </span>
                             <span className="shrink-0 font-mono font-semibold text-muted-foreground">
-                              {inr(g.lifetimeSpend)}
+                              {inr(g.folioAmount)}
                             </span>
                           </div>
                         </motion.button>
                       );
                     })}
 
-                    {/* Dashed Drop Slot for Creating New Guest (Meera Joshi) */}
-                    {grp === 2 && !guestCreated && (
+                    {/* Dashed Drop Slot for Adding New Guest (Meera Joshi) */}
+                    {grp === 2 && !guestAdded && (
                       <button
                         type="button"
-                        data-crm-target="create"
+                        data-crm-target="add"
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                           e.preventDefault();
-                          act("create");
+                          act("add");
                         }}
-                        onClick={() => act("create")}
+                        onClick={() => act("add")}
                         className={cn(
-                          "flex min-h-[104px] flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed p-3 text-center transition",
-                          isTarget("create")
+                          "flex min-h-[108px] flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed p-3 text-center transition",
+                          isTarget("add")
                             ? "border-gold-400 bg-gold-50/50 text-brand-800 ring-2 ring-gold-400/50"
                             : "border-brand-300/80 bg-brand-50/30 text-muted-foreground hover:border-brand-500",
                         )}
                       >
                         <UserPlus className="size-4 text-brand-600" />
-                        <span className="text-[11.5px] font-semibold">Drop to Create Guest</span>
-                        <span className="text-[10.5px]">Meera Joshi · Suite 203</span>
+                        <span className="text-[11.5px] font-semibold">Drop to Add New Guest</span>
+                        <span className="text-[10.5px]">Meera Joshi · Room 203</span>
                       </button>
                     )}
                   </div>
@@ -674,74 +700,91 @@ export function GuestCrm() {
             })}
           </div>
 
-          {/* Right 360° Guest Info Inspector Panel (same clean proportions as FloorPlan) */}
+          {/* Right Guest Profile & Service Messaging Inspector */}
           {selectedGuest && (
             <aside className="flex flex-col justify-between rounded-xl border border-border bg-muted/20 p-4">
               <div className="space-y-3">
+                {/* Guest Header */}
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="flex items-center gap-1.5 truncate text-[15.5px] font-bold text-foreground">
                       <UserRound className="size-4 shrink-0 text-primary" />
                       <span className="truncate">{selectedGuest.name}</span>
                     </p>
-                    <p className="truncate text-[11.5px] text-muted-foreground">
-                      {selectedGuest.city} · {selectedGuest.phone}
+                    <p className="mt-0.5 flex items-center gap-1 truncate text-[11.5px] text-muted-foreground">
+                      <Phone className="size-3 text-brand-600" /> {selectedGuest.phone}
                     </p>
                   </div>
                   <span
                     className={cn(
                       "shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold",
-                      TIER_META[selectedGuest.tier].badge,
+                      STATUS_META[selectedGuest.status].badge,
                     )}
                   >
-                    {selectedGuest.tier}
+                    {selectedGuest.status}
                   </span>
                 </div>
 
+                {/* Room & ID Profile Card */}
                 <div className="rounded-lg bg-card p-3 text-[12px] shadow-2xs">
-                  <p className="text-muted-foreground">Lifetime Spend &amp; Loyalty</p>
-                  <p className="mt-0.5 text-[15px] font-bold text-foreground">
-                    {inr(selectedGuest.lifetimeSpend)}{" "}
-                    <span className="text-[11.5px] font-semibold text-brand-700">
-                      · {selectedGuest.points.toLocaleString("en-IN")} pts
+                  <div className="flex items-center justify-between">
+                    <span className="flex items-center gap-1 font-semibold text-foreground">
+                      <BedDouble className="size-3.5 text-brand-600" /> {selectedGuest.room}
                     </span>
+                    <span className="font-mono font-bold text-brand-700">
+                      {inr(selectedGuest.folioAmount)}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Stay: {selectedGuest.stayDates} · {selectedGuest.city}
+                  </p>
+                  <p className="mt-1 text-[11px] font-semibold text-emerald-700">
+                    {selectedGuest.idDoc}
                   </p>
                 </div>
 
+                {/* Active Service Requests Card */}
                 <div className="rounded-lg bg-card p-3 text-[12px] shadow-2xs">
-                  <p className="text-muted-foreground">KYC &amp; Companion Vault</p>
-                  <p className="mt-0.5 font-semibold text-foreground">{selectedGuest.kycDoc}</p>
-                  <p className="mt-1 text-[11.5px] font-medium text-brand-700">
-                    {selectedGuest.companion}
+                  <p className="text-[11px] font-medium text-muted-foreground">
+                    Guest Service Requests
                   </p>
-                </div>
-
-                <div className="rounded-lg bg-card p-3 text-[12px] shadow-2xs">
-                  <p className="text-muted-foreground">Dietary &amp; Stay Preferences</p>
                   <div className="mt-1.5 flex flex-wrap gap-1.5">
-                    {selectedGuest.preferences.map((pref) => (
+                    {selectedGuest.services.map((srv) => (
                       <span
-                        key={pref}
+                        key={srv}
                         className="rounded-md bg-brand-50 px-2 py-0.5 text-[10.5px] font-semibold text-brand-800"
                       >
-                        {pref}
+                        {srv}
                       </span>
                     ))}
                   </div>
                 </div>
 
+                {/* Service Message Sent to Guest */}
+                <div className="rounded-lg border border-sky-200/80 bg-sky-50/40 p-3 text-[11.5px] shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sky-900">Service Message to Guest</span>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-sky-700">
+                      <CheckCheck className="size-3.5" /> {selectedGuest.messageSent ? "Sent" : "Ready"}
+                    </span>
+                  </div>
+                  <p className="mt-1 leading-snug text-foreground">
+                    &ldquo;{selectedGuest.lastMessage}&rdquo;
+                  </p>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => cycleGuestTier(selectedGuest.id, selectedGuest.tier)}
-                  className="w-full rounded-lg bg-brand-600 px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-brand-700"
+                  onClick={() => sendServiceMessageToGuest(selectedGuest)}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand-600 px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-brand-700"
                 >
-                  Cycle VIP Loyalty Tier
+                  <Send className="size-3.5" /> Send Service Message to Guest
                 </button>
               </div>
 
               <p className="mt-3 flex items-center gap-1.5 border-t border-border pt-2.5 text-[11px] text-muted-foreground">
                 <ShieldCheck className="size-3.5 shrink-0 text-emerald-500" />
-                Live sync with Front Desk &amp; Kitchen POS
+                Instant sync with Front Desk &amp; Room Service
               </p>
             </aside>
           )}
@@ -756,7 +799,7 @@ export function GuestCrm() {
               className="mt-4 rounded-xl bg-emerald-50 px-4 py-2.5 text-[13px] font-medium text-emerald-800"
               role="status"
             >
-              Guest CRM workflow complete — Meera Joshi&apos;s 360° profile is created, KYC verified, upgraded to Platinum VIP, and synced with Kitchen POS &amp; Front Desk.
+              Guest workflow complete — Meera Joshi is added to the directory, Room 203 &amp; ID proof are saved, and her service update message is sent.
             </motion.p>
           )}
         </AnimatePresence>

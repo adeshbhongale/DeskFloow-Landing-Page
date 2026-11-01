@@ -1,10 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
-import { Check, Minus, Sparkles } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { cn, inr } from "@/lib/utils";
+import { Check, Minus, Sparkles } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 
 type Billing = "monthly" | "yearly";
 
@@ -15,7 +15,7 @@ type Billing = "monthly" | "yearly";
 export const plans = [
   { id: "boutique", name: "Boutique", for: "For small independent hotels and inns", perRoom: 249, unit: "per room / month", min: "Up to 30 rooms", cta: "Book a demo", href: "/book-demo", features: ["Front desk PMS & tape chart", "Direct booking engine", "Housekeeping & floor plan", "Guest CRM", "WhatsApp templates (requires your WABA)"] },
   { id: "growth", name: "Growth", for: "For growing hotels and full-service resorts", perRoom: 399, unit: "per room / month", min: "Up to 150 rooms", cta: "Book a demo", href: "/book-demo", featured: true, features: ["Everything in Boutique", "OTA channel manager (per channel setup)", "Restaurant & room-service orders", "Folios, invoices & shift register", "Analytics & revenue dashboards"] },
-  { id: "enterprise", name: "Enterprise", for: "For multi-property groups and chains", perRoom: null, unit: "", min: "Multiple properties", cta: "Contact sales", href: "/contact", features: ["Everything in Growth", "Multi-property switching", "Centralized portfolio analytics", "Custom integrations & onboarding", "Dedicated success contact"] },
+  { id: "enterprise", name: "Enterprise", for: "For multi-property groups and chains", perRoom: null, unit: "", min: "Multiple properties", cta: "Contact Team", href: "/contact", features: ["Everything in Growth", "Multi-property switching", "Centralized portfolio analytics", "Custom integrations & onboarding", "Dedicated success contact"] },
 ] as const;
 
 export const comparisonRows: { label: string; values: (boolean | string)[] }[] = [

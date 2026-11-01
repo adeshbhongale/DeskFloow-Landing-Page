@@ -234,9 +234,9 @@ export function CrmPillar() {
   return (
     <Pillar
       id="crm"
-      eyebrow="Guest CRM & loyalty"
+      eyebrow="Guest CRM & profile directory"
       title="Recognise the guest behind every reservation."
-      lead="Explore DeskFloow's 360° guest intelligence — KYC records, VIP loyalty tiers, dietary & sleep preferences, anniversary alerts, multi-property stay history, and folio spend analytics."
+      lead="Add new guests in seconds, view every guest's complete profile, verified ID, room assignment, and stay history, and send instant service messages directly to their phone."
     >
       <GuestCrm />
     </Pillar>
